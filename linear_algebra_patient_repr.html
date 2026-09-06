@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="f4whjBu2PqkX7t8kuSh3Ma">
+<head data-page-node-id="mdLKZttdLXEmrpP3okAoZV">
+<meta charset="UTF-8" data-page-node-id="Vm117LDNkucEm92VsnvCMl">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="q2jhTs1tdhbO9gAm6jzrVU">
+<title>用「时序患者表征学习」学通线性代数</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#ffffff; --ink:#1b2437; --ink2:#475069; --ink3:#7a86a0;
+    --brand:#0e7490; --brand-soft:#e5f5f9; --accent:#7c3aed; --accent-soft:#f1ebfd;
+    --warn:#b45309; --warn-soft:#fdf3e3; --ok:#047857; --ok-soft:#e7f7f0;
+    --red:#dc2626; --line:#e3e8f0; --code-bg:#f1f3f9; --mono:'SF Mono',Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;background:var(--bg);color:var(--ink);line-height:1.85;font-size:15.5px}
+  h1,h2,h3,h4{line-height:1.4}
+  .hero{background:linear-gradient(135deg,#0e7490 0%,#155e75 45%,#5b21b6 100%);color:#fff;padding:60px 24px 52px;text-align:center}
+  .hero h1{font-size:32px;margin:0 0 12px;color:#fff}
+  .hero p{max-width:860px;margin:0 auto;opacity:.93;font-size:15.5px}
+  .hero .tags{margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .hero .tag{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.32);padding:4px 14px;border-radius:999px;font-size:13px}
+  .layout{max-width:1240px;margin:0 auto;display:flex;gap:30px;padding:30px 20px 80px}
+  nav.toc{flex:0 0 250px;position:sticky;top:24px;align-self:flex-start;max-height:calc(100vh - 48px);overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;font-size:13.5px}
+  nav.toc b{display:block;font-size:12.5px;color:var(--ink3);letter-spacing:1px;margin:2px 8px 10px}
+  nav.toc a{display:block;color:var(--ink2);padding:5px 10px;border-radius:8px;line-height:1.5;text-decoration:none}
+  nav.toc a:hover{background:var(--brand-soft);color:var(--brand)}
+  main{flex:1;min-width:0}
+  section.chapter{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:32px 36px;margin-bottom:34px;box-shadow:0 1px 3px rgba(20,40,70,.04)}
+  .ch-label{display:inline-block;background:var(--brand-soft);color:var(--brand);font-size:12.5px;font-weight:600;padding:3px 12px;border-radius:999px;letter-spacing:1px;margin-bottom:10px}
+  h2{font-size:23px;margin:4px 0 16px;padding-bottom:12px;border-bottom:2px solid var(--brand-soft)}
+  h3{font-size:18px;margin:28px 0 10px;color:#24304d}
+  h4{font-size:15.5px;margin:20px 0 8px}
+  .meaning{background:var(--brand-soft);border-left:4px solid var(--brand);border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0}
+  .meaning b{color:var(--brand)}
+  .keybox{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0}
+  .warnbox{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0}
+  .okbox{background:var(--ok-soft);border-left:4px solid var(--ok);border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0}
+  .calc{background:#fafbfe;border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin:18px 0}
+  .calc-title{font-weight:700;color:var(--brand);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .calc-title::before{content:"🧮"}
+  .step{margin:10px 0;padding-left:18px;border-left:3px solid var(--brand-soft)}
+  .step .lbl{font-weight:600;color:#24304d;font-size:14px}
+  table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14.5px;background:#fff}
+  th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+  th{background:#f2f6fa;font-weight:600}
+  tr:nth-child(even) td{background:#fafcfe}
+  .mtx{font-family:var(--mono);font-size:13.5px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;display:inline-block;margin:8px 0;line-height:1.9}
+  .mtx .hl{background:#fef08a;border-radius:3px;padding:0 2px}
+  .mtx .hl2{background:#bfdbfe;border-radius:3px;padding:0 2px}
+  .mtx .hl3{background:#bbf7d0;border-radius:3px;padding:0 2px}
+  .demo{background:#fbfbff;border:1.5px solid var(--accent);border-radius:14px;padding:20px 24px;margin:24px 0}
+  .demo-title{font-weight:700;font-size:16px;color:var(--accent);display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .demo-title::before{content:"🎛️"}
+  .demo canvas{display:block;margin:12px auto;border:1px solid var(--line);border-radius:10px;background:#fff}
+  .controls{display:flex;gap:20px;flex-wrap:wrap;align-items:center;margin:10px 0;font-size:13.5px;color:var(--ink2)}
+  .controls label{display:flex;align-items:center;gap:8px}
+  .controls input[type=range]{width:140px;accent-color:var(--accent)}
+  .controls button{background:var(--accent);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:13px;cursor:pointer}
+  .controls button:hover{background:#6d28d9}
+  .controls button.ghost{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+  .controls button.on{background:var(--accent);color:#fff}
+  .readout{font-family:var(--mono);font-size:13px;background:var(--code-bg);border-radius:8px;padding:10px 14px;margin-top:8px;white-space:pre-wrap;line-height:1.7}
+  .pill{display:inline-block;background:#fdf2f8;color:#be185d;font-size:12.5px;padding:2px 10px;border-radius:999px;margin-left:6px;font-weight:600}
+  .footer{text-align:center;color:var(--ink3);font-size:13px;padding:30px 0 50px}
+  .quad{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  .quad .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:#fff}
+  .quad .q h4{margin:0 0 8px;font-size:15px}
+  .quad .q .formula{font-family:var(--mono);background:var(--code-bg);display:inline-block;padding:2px 10px;border-radius:6px;margin:6px 0}
+  @media (max-width:960px){.layout{flex-direction:column}nav.toc{position:static;max-height:none}section.chapter{padding:22px}.quad{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-page-node-id="XvytWRer4qKaUFXHire97s">
+
+<div class="hero" data-page-node-id="XwlJp20QKGJnxK2geAMjBH">
+  <h1 data-page-node-id="0fFeDZDlPmcAuLFC1bvQbg">用「时序患者表征学习」学通线性代数</h1>
+  <p data-page-node-id="r5KYWWCKkhtLj4DZEgIUfg">以一个真实研究问题为贯穿案例 —— <b data-page-node-id="3liy7gn7BwVSqj75JQQ88L">患者时序数据 X ∈ R<sup data-page-node-id="yEDQhWl1KxoBaH21j95t6v">T×F</sup> 的表征学习与疾病预测</b> —— 逐章讲透每个线性代数概念的医疗意义、数值演算与论文写作陷阱。</p>
+  <div class="tags" data-page-node-id="qGd1T4ztX6d4q5oQZFFlQq">
+    <span class="tag" data-page-node-id="h1K7FZZitYusNl15rVAGmz">患者向量</span><span class="tag" data-page-node-id="DBjXdnkcOh5Jcjq7qrp7tn">T×F 矩阵</span><span class="tag" data-page-node-id="26D9MDNgwGWTneB9ANPssL">特征协方差</span>
+    <span class="tag" data-page-node-id="aZkejpCMSMFoXm5IAx5hiT">Feature Attention</span><span class="tag" data-page-node-id="jCNJ11rKvNimjnHftMbMpb">四概念辨析</span><span class="tag" data-page-node-id="kek0C8uFkVOCZyBEWDF9lX">Patient-specific 交互</span>
+    <span class="tag">范数与正则</span><span class="tag">秩 · 逆 · SVD</span><span class="tag">梯度与反向传播</span><span class="tag">数值稳定性</span>
+  </div>
+</div>
+
+<div class="layout" data-page-node-id="ePQPQDPaTnKCEp5MPO8S0r">
+<nav class="toc" data-page-node-id="nMjaa06MZX1tLC8uhA18Ts">
+  <b data-page-node-id="iKuXQ0jV2lUCrPA7pE5bAS">目录 CONTENTS</b>
+  <a href="#ch0" data-page-node-id="x9T1zHbpK6ZDJoDyZr7ICo">第 0 章 · 案例设定:一位患者 = 一个矩阵</a>
+  <a href="#ch1" data-page-node-id="iaZoRTgtGpmUoNu6u8kxTf">第 1 章 · 向量:某时刻的患者状态</a>
+  <a href="#ch13">第 2 章 · 向量代数:线性组合与正交</a>
+  <a href="#ch2" data-page-node-id="kL33hVkzqpcRoZDGa5i8LW">第 3 章 · 相似度:寻找相似患者</a>
+  <a href="#ch14">第 4 章 · 范数、正则化与梯度裁剪</a>
+  <a href="#ch15">第 5 章 · 矩阵乘法:批量变换</a>
+  <a href="#ch16">第 6 章 · 特殊矩阵家族</a>
+  <a href="#ch3" data-page-node-id="lFnkUR6mPfeegvcrWZ7KaD">第 7 章 · 矩阵变换:标准化与时间加权</a>
+  <a href="#ch17">第 8 章 · 秩、行列式与最小二乘</a>
+  <a href="#ch4" data-page-node-id="b4sBro8aKjFURSu1KVcBlv">第 9 章 · 协方差:统计意义上的特征相关</a>
+  <a href="#ch5" data-page-node-id="ITXIawLq5W3wvFTa6WxFNv">第 10 章 · 特征值与 PCA:患者队列降维</a>
+  <a href="#ch18">第 11 章 · SVD 与低秩近似</a>
+  <a href="#ch6" data-page-node-id="E94PGbF5FgtghTJsl6Vrck">第 12 章 · Feature Attention 完整精算</a>
+  <a href="#ch7" data-page-node-id="VFmepZFogcj3CLxuDjDvpc">第 13 章 · 四概念辨析(论文红线)</a>
+  <a href="#ch8" data-page-node-id="bgEer4OBhnKVZSb3FvzDGC">第 14 章 · Patient-specific 交互</a>
+  <a href="#ch19">第 15 章 · 多头、位置编码与 KV Cache</a>
+  <a href="#ch9" data-page-node-id="Ql9c6huNWaMbY2xOnm7oM7">第 16 章 · 时序维度:时间注意力与 RNN</a>
+  <a href="#ch20">第 17 章 · 梯度、Hessian 与反向传播</a>
+  <a href="#ch10" data-page-node-id="72gHzaQoDRvnw6SPC3CjVv">第 18 章 · 从表征到预测:全链路演算</a>
+  <a href="#ch21">第 19 章 · 数值稳定性</a>
+  <a href="#ch11" data-page-node-id="1FUdQXR4I1jI5Aj15Gjm4E">第 20 章 · 低秩微调与论文避坑清单</a>
+  <a href="#ch12" data-page-node-id="8hANaWPFZpxCTx5xaKhTxz">第 21 章 · 速查表</a>
+</nav>
+
+<main data-page-node-id="whLHvQ5kDGmfr49zUh343D">
+
+<!-- ================= 第 0 章 ================= -->
+<section class="chapter" id="ch0" data-page-node-id="gDiXDfG2tQ3oVvvNLFmkEF">
+<span class="ch-label" data-page-node-id="KTqVV2xS6z6XSZX2CC2hbm">第 0 章</span>
+<h2 data-page-node-id="5e9LiAUAwKT3Dh6d9qGfIY">案例设定:一位患者 = 一个矩阵</h2>
+<p data-page-node-id="HxUDHhRwc96lFGLVzofMfu">整份教程只围绕一个研究问题展开:</p>
+<div class="keybox" style="text-align:center;font-size:16px" data-page-node-id="o3ks9LDZF6Pu5uVXhztty0">
+给定患者 $p$ 的时序电子病历 $X_p \in \mathbb{R}^{T\times F}$,学习一个表征 $h_p \in \mathbb{R}^d$,用于疾病预测。
+</div>
+<p data-page-node-id="RFWKVHjXdVrxW57mtwURRN">其中 $T$ = 时间步数(如住院后 48 小时,每小时一次记录),$F$ = 医疗特征数。教程中固定使用 $F=3$ 的三个特征:</p>
+<table data-page-node-id="ptUoJSnhwoHxBFMLJM6efh">
+<tr data-page-node-id="JoYDqiMGPmRoV5fLhAbzhW"><th data-page-node-id="rDxtfumbx6fAHnzCYGOuYX">特征</th><th data-page-node-id="x5YHRWhHVPsG8aQtUzGC2f">记号</th><th data-page-node-id="0x2sAsB1hijUv0hjKnGA3M">单位</th><th data-page-node-id="nqDyT4wKlBrEifO6MtUHC3">正常参考</th></tr>
+<tr data-page-node-id="HZq4RZd0SyxDmJ5SIHD07u"><td data-page-node-id="TjnAV0nmGCTKkCHOV9YiuH">血糖 Glucose</td><td data-page-node-id="lOPc2Pl7fyEmNGkkYlKLDR">$x_G$</td><td data-page-node-id="fsLPdmxlDOmJnyjDzg6o0b">mg/dL</td><td data-page-node-id="Kg3FpoCtcVo3ImJy3iZKzQ">70–140</td></tr>
+<tr data-page-node-id="MQ7Rtw8XwsSrT8nKT1xilv"><td data-page-node-id="wNT1DSUwO8C1RUoJVCiKRt">心率 HR</td><td data-page-node-id="HnaAFl4CHOTZBahsZiAbgm">$x_H$</td><td data-page-node-id="Lqjgs8I7B7hJZyiHAu9e7E">bpm</td><td data-page-node-id="GvuyGX4Ov9TUYZxctMKZKc">60–100</td></tr>
+<tr data-page-node-id="acyWEfAo6XrLGjHUVl2DrI"><td data-page-node-id="LA8OoqLyEo0luSGsCEviKC">收缩压 BP</td><td data-page-node-id="28UsD8vak3o7gSbABePEpK">$x_B$</td><td data-page-node-id="0MD9CBiKdRJ1VitnfJMqog">mmHg</td><td data-page-node-id="1q0p1BFMtBv4Drj1ConpkL">90–120</td></tr>
+</table>
+<p data-page-node-id="YXzBS11E9UElrUtbRvLbul">于是一位患者 4 个时刻的记录就是:</p>
+<div style="text-align:center" data-page-node-id="z7oQF7h3JD5fmKYGtEJmL8"><span class="mtx" data-page-node-id="vq5XCpt2hsdC7CFp7M5Jkx">X_p = [250  120   90]  ← t=1(入院,高糖、心动过速、低血压)
+      [230  110   95]  ← t=2
+      [180   95  105]  ← t=3(治疗起效)
+      [150   85  110]  ← t=4(趋于稳定)</span></div>
+<div class="meaning" data-page-node-id="C2IZWpUaRZWUPvk0Y3Q4r0"><b data-page-node-id="sbAaQsgciDU5HdCebmrfmU">为什么这个案例适合学线性代数?</b>因为患者表征学习的每一步都精确对应一个线性代数概念:<b data-page-node-id="MnjyGRbGVMVHAx5WHc90l7">某时刻的状态 = 向量;整个病程 = 矩阵;队列 = 张量;特征缩放 = 对角矩阵;特征共变 = 协方差矩阵;特征交互 = 注意力矩阵;患者压缩表征 = 低秩投影</b>。学完线性代数,你就同时拆解了一篇 RETAIN / Transformer-EHR 类论文的全部数学结构。</div>
+<div class="warnbox"><b>严谨性提示(队列张量):</b>把队列写成 $\mathcal{X}\in\mathbb{R}^{N\times T\times F}$ 隐含所有患者 $T$ 相同。真实 EHR 中各患者长度 $T_p$ 不同,实际是 <b>padding + mask</b>(补齐到 $T_{max}$ 并用掩码标记有效位,第 3 章)或事件序列表示。本教程为教学统一用等长 $T$。</div>
+</section>
+
+<!-- ================= 第 1 章 ================= -->
+<section class="chapter" id="ch1" data-page-node-id="GaHUOuzFOVUbzO0tmBur7r">
+<span class="ch-label" data-page-node-id="6f4d2JVHdsE9CEog3HJBX9">第 1 章</span>
+<h2 data-page-node-id="fpFyaLPjDnerGjy7HPgbTH">向量:某一时刻的"患者状态快照"</h2>
+
+<h3 data-page-node-id="XZhA0J7376Sb3rZNWRqvWd">1.1 状态向量</h3>
+<p data-page-node-id="505ii3GJCTwG4xmXQ05C3b">某一时刻 $t$,患者的三个测量值构成一个列向量:</p>
+$$\mathbf{x}_t = \begin{pmatrix}250\\120\\90\end{pmatrix}\begin{matrix}\leftarrow\text{Glucose}\\\leftarrow\text{HR}\\\leftarrow\text{BP}\end{matrix}$$
+<div class="meaning" data-page-node-id="I4iIaGTXQ1vw34FLeeYGLw"><b data-page-node-id="hf9YXxYqmm8LZG3Nqu8EfL">现实意义:</b>这个向量就是"患者此刻的状态"在 3 维医学空间中的坐标。健康人群聚集在这个空间的某个区域(正常值立方体 $[70,140]\times[60,100]\times[90,120]$ 附近),病情恶化<b>常常表现为</b>状态向量<b data-page-node-id="uHxLCcX8ZIHiDglmjnS01J">远离</b>这个区域。注意:正常参考区间并不是欧氏空间里的"病情原点" —— 临床上<b>偏离的方向</b>(高糖 vs 低血糖)往往比距离本身更有意义,这个几何模型只是有用的近似。"疾病预测"本质上就是判断患者轨迹正在朝哪个危险区域移动。</div>
+
+<h3 data-page-node-id="dDruTrCKbHFQZ7YdCYFuij">1.2 向量的模长:偏离正常有多远</h3>
+<p data-page-node-id="VMx9q2ozdZ8CHbEzjMsbZX">以正常值中心 $c = (105, 80, 105)^\top$ 为参考,偏移向量 $\mathbf{x}_t - c$ 的 L2 范数度量"整体异常程度":</p>
+<div class="calc" data-page-node-id="NsDBzCRZ3LRzpwzjoysjfY">
+<div class="calc-title" data-page-node-id="MChhqHXu2LkGQY5GrotFty">演算:t=1 与 t=4 的异常程度对比</div>
+<div class="step" data-page-node-id="rCzKf3lnRQrQWJX9YcbvQ7"><span class="lbl" data-page-node-id="gREA2Yiz0OE7j0pRNiBvVZ">t=1:</span> $x_1 - c = (145, 40, -15)$,$\|x_1-c\|_2 = \sqrt{145^2+40^2+15^2} = \sqrt{21025+1600+225} = \sqrt{22850} \approx \mathbf{151.2}$</div>
+<div class="step" data-page-node-id="l01B2JzTu2cBnEtxANsxBG"><span class="lbl" data-page-node-id="taGgwNVHxpImErK0iR20r3">t=4:</span> $x_4 - c = (45, 5, 5)$,$\|x_4-c\|_2 = \sqrt{2025+25+25} = \sqrt{2075} \approx \mathbf{45.6}$</div>
+<div class="step" data-page-node-id="7YARLQcf3UQjuUzuuOUTGF"><span class="lbl" data-page-node-id="wHWCoDlR0JHBo66OH1RW1S">结论:</span>异常度从 151.2 降到 45.6 —— 一个标量就概括了"病情好转"。<b data-page-node-id="cmAF96WtH5Lc41sM7skT4b">注意陷阱:</b>血糖(单位 mg/dL,数值上百)主导了这个距离,心率的变化几乎被淹没 —— 这就是第 7 章必须做标准化的原因。</div>
+</div>
+
+<h3 data-page-node-id="iTpwtZFLyyOJjsrq1GF7lr">1.3 单位换算的坑:量纲 = 坐标轴的刻度</h3>
+<div class="warnbox" data-page-node-id="qxlvuypEhVCDgtDOuq0scO"><b data-page-node-id="Ae2D68AXGZr2CEJCuDFgS7">量纲是向量空间的"隐形坐标刻度"。</b>血糖从 mg/dL 换成 mmol/L(÷18),等价于把该坐标轴压缩 18 倍 —— 向量空间本身没变,但所有基于距离的算法(KNN、L2 正则、梯度尺度)结果全变。医疗数据多源异构(不同医院单位不同),这是 EHR 研究中最常见的静默 bug 来源。</div>
+</section>
+
+<!-- ================= 第 2 章(新增) ================= -->
+<section class="chapter" id="ch13">
+<span class="ch-label">第 2 章</span>
+<h2>向量代数:加减、线性组合、张成与正交</h2>
+
+<h3>2.1 向量减法:状态变化量</h3>
+<p>两个时刻状态向量相减,得到"状态变化向量"(state change vector):</p>
+<div class="calc">
+<div class="calc-title">演算:治疗前后对比</div>
+<div class="step"><span class="lbl">Δx = x₄ − x₁</span> $= (150,85,110) - (250,120,90) = (-100, -35, +20)$</div>
+<div class="step"><span class="lbl">解读:</span>血糖降 100、心率降 35、血压升 20。严谨地说,Δx 是<b>状态变化</b>;只有当两个时点具有明确的治疗语义(给药前/后)且排除其他干扰时,它才可以被解读为"治疗反应" —— 观察性数据中变化 ≠ 治疗效果(混杂)。在学到的表征空间里,$h_{治疗后} - h_{入院}$ 如果跨患者指向一致方向,那个方向就是"好转轴" —— 这正是 word2vec 语义算术(king − man + woman ≈ queen)在患者表征上的翻版。</div>
+</div>
+
+<h3>2.2 线性组合:临床评分卡的本质</h3>
+<p>$c_1x_1 + c_2x_2 + \cdots + c_F x_F = \mathbf{w}^\top\mathbf{x}$ —— 所有线性临床评分都是它:</p>
+<div class="calc">
+<div class="calc-title">演算:一个简易风险评分(NEWS 评分的精神)</div>
+<div class="step"><span class="lbl">权重 w = (0.5, 2.0, 1.5)(标准化后的血糖、心率、血压权重):</span><br>
+患者 x' = (2.17, 1.75, −1.00)</div>
+<div class="step"><span class="lbl">评分 = w·x'</span> $= 0.5\times2.17 + 2.0\times1.75 + 1.5\times(-1.00) = 1.085 + 3.5 - 1.5 = \mathbf{3.09}$</div>
+<div class="step"><span class="lbl">视角升级:</span>人工评分卡 = 医生手工设定的 $w$;逻辑回归 = 从数据学出 $w$;深度模型 = 学出多层嵌套的线性组合。<b>你每天都在用的"加权求和",就是线性组合。</b></div>
+</div>
+
+<h3>2.3 张成与线性无关:特征到底有没有冗余</h3>
+<ul>
+<li><b>张成(span):</b>一组特征所有线性组合能到达的空间 —— 3 个特征的评分卡最多只能"看到" $\mathbb{R}^3$ 中由它们张成的部分;</li>
+<li><b>线性相关:</b>若某特征能被其他特征线性表出,它携带零新信息。医疗数据的典型:肌酐与 eGFR(eGFR 由肌酐、年龄、性别公式算出)、体温 ℃ 与 ℉、由检验套餐重复采的指标;</li>
+<li><b>后果:</b>特征矩阵秩亏 → $X^\top X$ 不可逆 → 线性回归解不唯一、系数符号乱飞(第 8 章详算)。</li>
+</ul>
+
+<h3>2.4 正交:特征之间"零重叠"(有条件)</h3>
+<p>$\mathbf{a}\cdot\mathbf{b} = 0 \iff$ 正交。严格的对应关系是:<b>对已中心化的数据列,零内积 ⇔ 零 Pearson 协方差</b>(因为此时 $\mathrm{cov}(a,b) \propto a^\top b$)。少了中心化这个前提,"正交 = 不相关"不成立。</p>
+<div class="meaning"><b>现实意义:</b>①正交特征信息不重叠,但<b>不能反推"理想特征集必须互相正交"</b> —— 医学中高度相关的变量(如血糖与胰岛素)常共同携带重要信息,是否剔除冗余取决于共线性程度与任务(第 8 章);②神经网络的<b>正交初始化</b>让权重矩阵的行彼此正交,前向时各方向能量不互相挤压,缓解梯度消失(第 6 章验算);③注意力各头学到相似模式是常见冗余,可以用 <b>diversity regularization</b>(如鼓励头间正交的罚项)缓解 —— 但正交不是 Transformer 的内在数学要求;④第 10 章 PCA 的主成分两两正交 —— 这是"主成分彼此不冗余"的代数保证(由协方差矩阵对称性推出)。</div>
+</section>
+
+<!-- ================= 第 3 章 ================= -->
+<section class="chapter" id="ch2" data-page-node-id="omiZHcQWhqCgJ84fjbzD33">
+<span class="ch-label" data-page-node-id="q8gNX9ux7197BhIt3H3lpS">第 3 章</span>
+<h2 data-page-node-id="am3liFcP7sIYY0aIeLQej8">相似度:寻找"相似患者"</h2>
+
+<h3 data-page-node-id="n7K1x490oIadXhfurE1i7E">2.1 点积与余弦相似度的患者检索意义</h3>
+<p data-page-node-id="6dWj5gOx9ofVvKABA3nPhV">患者队列研究、病例对照匹配(case-control matching)、「像我这样的患者预后如何」—— 都是在问:<b data-page-node-id="8EN7GaOHcIWEVwtb9Y8E04">哪些患者的状态向量方向一致?</b></p>
+$$\cos(\mathbf{x}_a, \mathbf{x}_b) = \frac{\mathbf{x}_a\cdot\mathbf{x}_b}{\|\mathbf{x}_a\|\,\|\mathbf{x}_b\|}$$
+<div class="calc" data-page-node-id="mrQx4dr6MehGSkUKuAeuOf">
+<div class="calc-title" data-page-node-id="dsaImnXV2ZWYjKgJtCkcZM">演算:三位入院患者,谁和谁病情模式相似?</div>
+<div class="step" data-page-node-id="ESvHg4dfrDyuY20tzDNZQT"><span class="lbl" data-page-node-id="pIYrGv4Q5O8UyVl1gD1Mu7">标准化后(第 7 章方法,z-score)的入院向量:</span><br data-page-node-id="mvZQe1F4GJYY61LoJ8nFpk">
+P1 = (2.0, 1.5, -1.0) —— 高糖+心动过速+低血压<br data-page-node-id="KdTBsmQFg2nCHhYfdhc9VQ">
+P2 = (1.8, 1.6, -0.9) —— 同模式,程度稍轻<br data-page-node-id="7p62pBI7pfllSK1LBNOexx">
+P3 = (-0.5, 1.2, 0.8) —— 心率快但血糖偏低、血压偏高(不同病因)</div>
+<div class="step" data-page-node-id="OCExXXiG2rNPwVZo7MRvDz"><span class="lbl" data-page-node-id="UEUNS9bzYP41gdgatwBDlF">P1·P2</span> $= 2.0\times1.8 + 1.5\times1.6 + (-1.0)(-0.9) = 3.6+2.4+0.9 = 6.9$<br data-page-node-id="wsCM3h9s6pYpbCflUfoxOL">
+$\|P1\| = \sqrt{4+2.25+1} = 2.69$,$\|P2\| = \sqrt{3.24+2.56+0.81} = 2.57$<br data-page-node-id="MDKnIXsMHlt9nvQA5zwwvj">
+$\cos(P1,P2) = 6.9/(2.69\times2.57) = \mathbf{0.998}$ —— 几乎同向,同种病情模式 ✓</div>
+<div class="step" data-page-node-id="5cJHnCPV92deFyEFX8ohHB"><span class="lbl" data-page-node-id="4HHjgE4a76LncVHpcqKLgt">P1·P3</span> $= -1.0+1.8-0.8 = -1.0$;$\|P3\| = \sqrt{0.25+1.44+0.64} = 1.53$<br data-page-node-id="cYuauQAEoBBoCQI0zEv4wS">
+$\cos(P1,P3) = -1.0/(2.69\times1.53) = \mathbf{-0.24}$ —— 不同模式 ✓</div>
+</div>
+<div class="meaning" data-page-node-id="G8aTGvb7NnMhTbBfl4ZLhZ"><b data-page-node-id="xIvs3mWsNXeoA4SB6DBYF1">现实意义:</b>这就是"相似患者检索"(patient similarity retrieval)的最小实现。真实系统用学到的表征 $h_p$(而非原始测量)做同样计算 —— 表征学习的全部目标,就是让"临床结局相似"的患者在向量空间中彼此靠近。</div>
+
+<div class="demo" data-page-node-id="BEmFjgHSt85ZCzw8xrLey2">
+<div class="demo-title" data-page-node-id="yiXDzdLUfAWAIDaDvPp61q">交互演示:患者相似度检索</div>
+<p style="font-size:13.5px;color:var(--ink2)" data-page-node-id="fFtJCiubwzPExiiGoV7cd0">目标患者 P1 固定为"高糖+快心率+低血压"模式。调节候选患者 P2 的各特征偏离度,观察余弦相似度与欧氏距离的变化 —— 注意两者给出"相似"判断的差异。</p>
+<div class="controls" data-page-node-id="i1ccNCLvEeehqOwAA1ptNB">
+  <label data-page-node-id="C5570Wn8KPWIAKJ85WKNW8">血糖偏离: <input type="range" id="simG" min="-30" max="30" value="-2" data-page-node-id="3hkwYJIQtNzs5jsnsNKpax"> <span id="simGV" data-page-node-id="incG5ihJEAJiu7StLSNHwo">-0.2</span></label>
+  <label data-page-node-id="XeODB9HYm3epAmPa7hsJgS">心率偏离: <input type="range" id="simH" min="-30" max="30" value="1" data-page-node-id="rBomw4sJBbopzlgvBeMQeB"> <span id="simHV" data-page-node-id="kDLjhy0Rf2HqXVxNuiSDDn">0.1</span></label>
+  <label data-page-node-id="GNNy2C2HdAfpm4a5imuRb5">血压偏离: <input type="range" id="simB" min="-30" max="30" value="1" data-page-node-id="VH4Ld1bLavYTIHWz2KfXKf"> <span id="simBV" data-page-node-id="gPUEfIBdSEO0sIR74Imx9f">0.1</span></label>
+</div>
+<canvas id="simCanvas" width="520" height="260" data-page-node-id="jNwjIWOw79RYFcDQexNI6A"></canvas>
+<div class="readout" id="simOut" data-page-node-id="bkBrmJmQHmdu2NMtJ3y1YG"></div>
+</div>
+
+<h3 data-page-node-id="f6K1pkQu4Lb8VveiAyCK3B">2.2 缺失值:医疗数据的常态</h3>
+<p data-page-node-id="kpx1ODE2ynC4tVPQGLAtHg">真实 EHR 中某时刻可能只测了心率,血糖缺失。对应到向量:某些分量"不存在"。处理方式本身就是矩阵操作:</p>
+<ul data-page-node-id="79EF9JbMBn5KFbHTeXYqLt">
+<li data-page-node-id="80ZetvCMJyr5AdWUV1VYvZ"><b data-page-node-id="r3BWjpvQ87ta5fehNIPDTQ">掩码向量</b> $m_t = (1, 1, 0)^\top$(0 = 缺失),数据向量与掩码<b data-page-node-id="KmbjJdfMqTDBw3xjNBCq5L">逐元素相乘(Hadamard 积)</b> $x_t \odot m_t$ 把缺失位置零;</li>
+<li data-page-node-id="SwJfScN72vcdOFgHExV5Bj">相似度只在 $m_a \odot m_b$ 的共同观测维度上计算;</li>
+<li data-page-node-id="JGkEb1yUEUS8j59WhITlXZ">GRU-D 等模型把 $m_t$ 和时间间隔 $\Delta_t$ 一起作为输入 —— 缺失模式本身携带信息(没测血糖 ≈ 医生认为血糖不重要 ≈ 病情不重)。</li>
+</ul>
+</section>
+
+<!-- ================= 第 4 章(新增) ================= -->
+<section class="chapter" id="ch14">
+<span class="ch-label">第 4 章</span>
+<h2>范数、正则化与梯度裁剪:从 300 项指标到 3 项</h2>
+
+<h3>4.1 Lp 范数家族与医疗角色</h3>
+$$\|\mathbf{x}\|_p = \left(\sum_i |x_i|^p\right)^{1/p}$$
+<table>
+<tr><th>范数</th><th>公式</th><th>在患者数据中的角色</th></tr>
+<tr><td>L1(曼哈顿)</td><td>$\sum_i|x_i|$</td><td><b>L1 正则(LASSO)→ 自动特征选择:</b>从 300 项检验指标中把绝大多数系数压成精确的 0,只留下少数关键指标 —— 产出可解释的"最小指标集",临床医生最爱</td></tr>
+<tr><td>L2(欧氏)</td><td>$\sqrt{\sum_i x_i^2}$</td><td>L2 正则 / weight decay:系数小而平滑,小队列(几百例患者)防过拟合的主力;异常度度量(第 1 章)</td></tr>
+<tr><td>L∞(最大)</td><td>$\max_i|x_i|$</td><td>最坏情况扰动:对时序 EHR 可表示每个变量允许的最大篡改幅度 $\|\delta\|_\infty\le\epsilon$(对抗鲁棒性/数据投毒分析的预算);"最异常的那个指标有多异常"</td></tr>
+</table>
+
+<h3>4.2 正则化的几何:L1 为什么产稀疏</h3>
+<div class="meaning">给损失加罚项 $\lambda\|w\|_p$ 等价于把 $w$ 约束在"p 范数球"内,最优解出现在损失等高线与球面的<b>切点</b>。L1 的球是<b>菱形,尖角落在坐标轴上</b> —— 切点大概率撞上尖角,此时某些分量精确为 0 → 稀疏 → 特征被自动剔除。L2 的球是光滑圆,切点位置随机,系数都变小但几乎不为 0。<b>对 EHR 研究:L1 = "只保留关键指标"的数学装置。</b></div>
+
+<div class="demo">
+<div class="demo-title">交互演示:p-(准)范数等高线 —— 稀疏性的几何来源</div>
+<p style="font-size:13.5px;color:var(--ink2)">所有满足 ‖w‖<sub>p</sub>=1 的点。p=1 是菱形(尖角在轴上 → 稀疏),p=2 是圆,p→∞ 是方形。想象损失等高线从外向内收缩,最先碰到哪里?</p>
+<div class="controls">
+  <label>p 值: <input type="range" id="normP2" min="50" max="800" value="100"> <span id="normPV2">1.00</span></label>
+  <span style="font-size:12.5px;color:var(--ink3)">(0.5 → 星形 · 1 → 菱形 · 2 → 圆 · 8 → 接近方形)</span>
+</div>
+<canvas id="normCanvas2" width="400" height="400"></canvas>
+<p style="font-size:12.5px;color:var(--warn);margin:6px 0 0">⚠ 严格性提示:0&lt;p&lt;1 时不满足三角不等式,<b>不是范数</b>,只是 quasi-norm(准范数)等高线 —— 演示形状可以,叫 "Lp norm ball" 不行。只有 p≥1 才是真正的范数。</p>
+</div>
+
+<h3>4.3 距离家族:患者相似度的三种尺子</h3>
+<ul>
+<li><b>欧氏</b> $\|a-b\|_2$:整体偏离程度,但对量纲敏感(第 1 章的坑);</li>
+<li><b>曼哈顿</b> $\|a-b\|_1$:高维下对比度更好,对离群测量(一次误测的极端血糖)更鲁棒;</li>
+<li><b>余弦距离</b> $1-\cos\theta$:看"模式"不看"程度"(第 3 章)。</li>
+</ul>
+
+<h3>4.4 矩阵范数与梯度裁剪</h3>
+<p>Frobenius 范数 $\|A\|_F = \sqrt{\sum_{i,j}a_{ij}^2}$ 把矩阵拉直当向量算 L2。训练时若总梯度范数超阈值就整体缩放:</p>
+$$\text{若 } \|\mathbf{g}\|_2 > \tau,\quad \mathbf{g} \leftarrow \mathbf{g}\cdot\frac{\tau}{\|\mathbf{g}\|_2}$$
+<div class="meaning"><b>医疗场景的特殊性:</b>EHR 存在极端值(一次误录的血糖 2000、罕见危重事件),单个样本可能产生巨大梯度,一步更新毁掉整晚训练。梯度裁剪(通常 τ=1.0)是不改变方向、只缩短步长的"保险丝" —— 医疗大模型和时序模型训练的标配。</div>
+</section>
+
+<!-- ================= 第 5 章(新增) ================= -->
+<section class="chapter" id="ch15">
+<span class="ch-label">第 5 章</span>
+<h2>矩阵乘法:患者队列的批量变换机器</h2>
+
+<h3>5.1 逐格演算:每个格子 = 一次点积</h3>
+<p>$(AB)_{ij}$ = A 的第 i 行 · B 的第 j 列;内维必须相等 $(m\times k)(k\times n)\to(m\times n)$。</p>
+<div class="calc">
+<div class="calc-title">演算:3 位患者 × 3 特征,一次算出所有人的"双指标风险分"</div>
+<div class="step"><span class="lbl">标准化数据 X(3 患者 × 3 特征),权重 W(3 特征 × 2 个评分):</span><br>
+<span class="mtx">X = [<span class="hl">2.0</span>  <span class="hl">1.5</span>  <span class="hl">-1.0</span>]  P1      W = [<span class="hl2">0.5</span>  0.1]  ← 血糖
+    [0.5   0.5   0.5 ]  P2          [ <span class="hl2">2.0</span>  0.3]  ← 心率
+    [-0.5 -1.0   1.0 ]  P3          [<span class="hl2">1.5</span>  2.0]  ← 血压</span>
+<span style="font-size:12.5px;color:var(--ink3)">W 第 1 列 = 代谢应激评分权重,第 2 列 = 循环评分权重</span></div>
+<div class="step"><span class="lbl">P1 的代谢评分 (1,1) 格</span> = X 第 1 行 · W 第 1 列 = $2.0\times0.5 + 1.5\times2.0 + (-1.0)\times1.5 = 1.0+3.0-1.5 = \mathbf{2.5}$</div>
+<div class="step"><span class="lbl">全部算完:</span><br>
+<span class="mtx">Y = XW = [<span class="hl3">2.5</span>  <span class="hl3">-1.35</span>]  P1:代谢 2.5,循环 −1.35(低血压拉低)
+         [ 2.0   1.2 ]  P2
+         [-0.75  1.65]  P3</span>
+验证 (1,2):$2.0\times0.1 + 1.5\times0.3 + (-1.0)\times2.0 = 0.2+0.45-2.0 = -1.35$ ✓;
+验证 (2,1):$0.5\times0.5+0.5\times2.0+0.5\times1.5 = 0.25+1.0+0.75 = 2.0$ ✓</div>
+<div class="step"><span class="lbl">batch 的意义:</span>不用矩阵,3 位患者要循环 3 次;写成 XW,GPU 一次算完 10 万患者的全部评分,每个格子独立并行。<b>把 for 循环变成矩阵乘法,是医疗模型能全院部署的工程根基。</b></div>
+</div>
+
+<h3>5.2 一层神经网络 = 仿射变换</h3>
+<p>$y = Wx + b$:旋转、拉伸(由 W)再平移(由 b)。深度网络 = 多个仿射变换嵌套非线性,$W_L\cdots W_2W_1x$ 把"原始指标空间"逐步弯折成"风险可分空间"。</p>
+
+<h3>5.3 转置与不可交换:顺序就是医学流程</h3>
+<div class="calc">
+<div class="calc-title">演算:先标准化再嵌入 ≠ 先嵌入再标准化</div>
+<div class="step">$AB \neq BA$:变换有顺序。医疗数据管线里,"先标准化(z-score)再做嵌入投影"是唯一正确顺序 —— 反过来等价于在未校准量纲的空间里学嵌入,血糖(上百)会主导一切。</div>
+<div class="step"><span class="lbl">转置规则 $(AB)^\top = B^\top A^\top$(顺序反转):</span>反向传播推导梯度维度时全靠它;注意力里 $K^\top$ 让"特征×维度"转回"维度×特征"才能和 Q 做点积。</div>
+</div>
+
+<div class="demo">
+<div class="demo-title">交互演示:矩阵 = 特征空间变形器</div>
+<p style="font-size:13.5px;color:var(--ink2)">把 (血糖, 心率) 平面交给 2×2 矩阵 M 变形。红/蓝箭头是<b>特征向量</b>(只被缩放、不被旋转的方向,λ 为特征值)—— 第 10 章 PCA 找的就是对称矩阵的这些方向。</p>
+<div class="controls">
+  <label>a: <input type="range" id="mA2" min="-200" max="200" value="150"> <span id="mAV2">1.5</span></label>
+  <label>b: <input type="range" id="mB2" min="-200" max="200" value="0"> <span id="mBV2">0</span></label>
+  <label>c: <input type="range" id="mC2" min="-200" max="200" value="0"> <span id="mCV2">0</span></label>
+  <label>d: <input type="range" id="mD2" min="-200" max="200" value="100"> <span id="mDV2">1</span></label>
+  <button class="ghost" id="mPre1">旋转 30°</button>
+  <button class="ghost" id="mPre2">剪切</button>
+  <button class="ghost" id="mPre3">对称拉伸</button>
+</div>
+<canvas id="mtxCanvas2" width="420" height="420"></canvas>
+<div class="readout" id="mtxOut2"></div>
+</div>
+</section>
+
+<!-- ================= 第 6 章(新增) ================= -->
+<section class="chapter" id="ch16">
+<span class="ch-label">第 6 章</span>
+<h2>特殊矩阵家族:患者建模的六种武器</h2>
+<table>
+<tr><th>矩阵</th><th>定义</th><th>在患者表征学习中的角色</th></tr>
+<tr><td>单位矩阵 $I$</td><td>对角全 1;$Ix=x$</td><td>残差连接 $y = x + f(x)$ 的矩阵视角:梯度有"直通车道",深网络可训练</td></tr>
+<tr><td>对角矩阵</td><td>仅对角非零</td><td>标准化 $D^{-1}$(第 7 章)、时间衰减 $\Gamma$(第 7 章)、Adam 优化器的逐参数学习率 $1/\sqrt{\hat v}$ 就是时变对角阵</td></tr>
+<tr><td>对称矩阵 $A=A^\top$</td><td>关于主对角线镜像</td><td>协方差矩阵 $\Sigma$、Hessian、Gram 矩阵 $X^\top X$ —— 对称保证特征值为实数、特征向量正交(PCA 合法性的来源)</td></tr>
+<tr><td>正交矩阵 $Q^\top Q=I$</td><td>列向量两两正交且单位长</td><td>保长度、保夹角 → 正交初始化防梯度消失;RoPE 位置/时间编码 = 按位置旋转 Q/K 向量;SVD 的 U、V</td></tr>
+<tr><td>置换矩阵 $P$</td><td>每行每列恰一个 1</td><td>打乱患者顺序(shuffle 训练集);多头注意力拼接后的维度重排</td></tr>
+<tr><td>半正定 $A\succeq 0$</td><td>任意 x 有 $x^\top Ax \ge 0$</td><td>协方差矩阵必半正定(任何方向投影的方差 ≥ 0)→ PCA 特征值非负;Hessian 在驻点<b>正定 ⇒</b> 严格局部极小(注意:仅半正定不足以判定,见第 17 章)</td></tr>
+</table>
+<div class="calc">
+<div class="calc-title">演算:验证旋转矩阵是正交矩阵(保长度)</div>
+<div class="step">$Q = \begin{pmatrix}\cos\theta & -\sin\theta\\ \sin\theta & \cos\theta\end{pmatrix}$,θ=90°:$Q=\begin{pmatrix}0&-1\\1&0\end{pmatrix}$</div>
+<div class="step">$Q^\top Q = \begin{pmatrix}0&1\\-1&0\end{pmatrix}\begin{pmatrix}0&-1\\1&0\end{pmatrix} = I$ ✓</div>
+<div class="step">保长度:$\|Q(3,4)^\top\| = \|(-4,3)\| = 5 = \|x\|$ ✓ —— 旋转不改尺度,这就是"正交初始化保持梯度能量"与"RoPE 只转方向、不改语义强度"的原理。</div>
+</div>
+<div class="meaning"><b>为什么协方差必为半正定:</b>任意权重方向 w 上,患者评分的方差 $\mathrm{Var}(Xw) = w^\top\Sigma w$ 不可能是负数 —— 方差非负 ⇒ Σ 半正定 ⇒ 特征值非负 ⇒ PCA 的"解释方差占比"永远是合法百分比。一条从定义直通论文图表的推理链。</div>
+</section>
+
+<!-- ================= 第 7 章 ================= -->
+<section class="chapter" id="ch3" data-page-node-id="Li8eyChhmf3CQNETvhjcTx">
+<span class="ch-label" data-page-node-id="e8KYbeKWlvlOtN6fBcJe7F">第 7 章</span>
+<h2 data-page-node-id="DMybRzIrfBnHzhOCauFmXD">矩阵变换:标准化、嵌入与时间加权</h2>
+
+<h3 data-page-node-id="4RJkcWXMQ4zaeH4HGqbSCV">7.1 标准化 = 对角矩阵缩放</h3>
+<p data-page-node-id="Rb9TGAU0Wiqshp3lvJc5QK">第 1 章发现血糖数值主导距离。解法是 z-score 标准化:$x' = (x-\mu)/\sigma$。写成矩阵形式,对整个数据矩阵:</p>
+$$X' = (X - \mathbf{1}\mu^\top)\,D^{-1}, \qquad D = \mathrm{diag}(\sigma_G, \sigma_H, \sigma_B)$$
+<div class="calc" data-page-node-id="AgkkKloP1e7cJvyK1302qz">
+<div class="calc-title" data-page-node-id="kBjkdRvhInw9quf73xw2eS">演算:对角矩阵右乘 = 逐列缩放</div>
+<div class="step" data-page-node-id="f0gZGu7NyQqUOm54Pve4zd"><span class="lbl" data-page-node-id="nXpfIBc4cD4jcCWmvg7LAw">队列统计:</span>$\mu = (120, 85, 105)$,$\sigma = (60, 20, 15)$</div>
+<div class="step" data-page-node-id="k9yklSwQRluOHL1yhuocEs"><span class="lbl" data-page-node-id="2vQX9XDXTG8MjSFS21iQPG">入院向量 x = (250, 120, 90) 标准化:</span><br data-page-node-id="fKoodfZWxO4WdeepGWebkJ">
+血糖:$(250-120)/60 = 2.17$;心率:$(120-85)/20 = 1.75$;血压:$(90-105)/15 = -1.00$<br data-page-node-id="982ubJv3BJhSnSC1iqqaX3">
+$x' = (2.17, 1.75, -1.00)$ —— 三个特征现在同尺度,心率的影响不再被血糖淹没 ✓</div>
+<div class="step" data-page-node-id="CowCmaRgOBAlm4C4g5Cyxp"><span class="lbl" data-page-node-id="ZxgoW2lG7cNwEBmD4GyVND">矩阵视角:</span>右乘 $D^{-1} = \mathrm{diag}(1/60, 1/20, 1/15)$ 把每列除以对应 $\sigma$。<b data-page-node-id="wMXGVjcHLxLVWSpRxEHxHv">对角矩阵的几何意义 = 沿坐标轴各向异性缩放</b>,它不改变数据的"形状结构",只校准刻度。</div>
+</div>
+
+<h3 data-page-node-id="ulYV4NqpUGafPN9hsJpIMv">3.2 特征嵌入 = 投影矩阵</h3>
+<p data-page-node-id="mHMjhyff2RjJkB7zKXsd1A">把 F=3 维原始特征投到 d 维表征空间(如 d=4):$E = XW_e$,$W_e \in \mathbb{R}^{3\times 4}$。</p>
+<div class="meaning" data-page-node-id="YTWG5nWLOkSmEksAqAvjWW"><b data-page-node-id="OPtFE3qGTMlHED75d8AhYv">现实意义:</b>为什么要升维?3 维空间里"血糖高 + 心率快 + 血压低"这个<b data-page-node-id="Bz4M6PFshUeBIUI1JQPAdm">组合模式</b>只是某个方向;升到高维后,表示空间有了更大的<b>容量(capacity)</b>去编码复杂的特征组合 —— 注意这是"提供了可能",至于"休克前期模式"是否真的占据一个可分离的方向,是训练学到的结果,不是维度升高自动保证的。$W_e$ 的第 i 行回答:"原始特征 i 应该向哪些表征方向贡献能量"。</div>
+
+<h3 data-page-node-id="zeCzlTbo7hwbumAAByJYJT">3.3 时间衰减加权 = 对角矩阵左乘</h3>
+<p data-page-node-id="1oBllSsNAh2v74WHvx9nLR">直觉:3 天前的测量不如 1 小时前的重要。给每个时间步一个权重 $\gamma_t = e^{-\Delta_t/\tau}$,写成对角矩阵 $\Gamma = \mathrm{diag}(\gamma_1,\dots,\gamma_T)$,则加权轨迹 = $\Gamma X$。</p>
+<div class="calc" data-page-node-id="xpZ93WszFAoqY4R4DpynB5">
+<div class="calc-title" data-page-node-id="rJyiIv1xHwyPvAMWTvc0oH">演算:τ = 24h 的指数衰减</div>
+<div class="step" data-page-node-id="k7GhiDYCiJVbp0mQEBXSQs">距当前 $\Delta = (72, 48, 24, 1)$ 小时 → $\gamma = (e^{-3}, e^{-2}, e^{-1}, e^{-0.04}) \approx (0.050, 0.135, 0.368, 0.961)$</div>
+<div class="step" data-page-node-id="Oe6ZHWg858zGgFsTHhLlNb">加权后,最早时刻的信息只剩 5%。<b data-page-node-id="DX5PXrHrSFSVUopeEWCHRX">左乘对角矩阵 = 逐行缩放</b>(对比:右乘 = 逐列)。行 ↔ 时间,列 ↔ 特征,这条对应关系请牢记,后面注意力矩阵的解读全靠它。</div>
+</div>
+<div class="meaning" data-page-node-id="IJXppvON3shOgd7zDpz56l"><b data-page-node-id="4KBICjeyPLCaBq9jO0wnmg">从左乘/右乘看矩阵乘法:</b>$\Gamma X$ 作用在"时间轴",$X D^{-1}$ 作用在"特征轴"。一个 $T\times F$ 患者矩阵,左边乘 $T\times T$ 矩阵 = 混合/加权<b data-page-node-id="F3AZTMP2rFE0MEJZRsDJrF">时刻</b>,右边乘 $F\times F$ 矩阵 = 混合/加权<b data-page-node-id="2avwE3HKY6OZGEWGBKyMuc">特征</b>。第 12 章的特征注意力 $AV$ 则是<b>左乘思想的数据驱动版本</b>:在"token × 维度"布局下,$F\times F$ 的 $A$ 从左侧混合 value 矩阵的行(特征 token),与 $\Gamma X$ 混合时刻同构 —— 区别在于 $\Gamma$ 是先验固定的对角阵,而 $A$ 是由 $QK^\top$ 从数据本身实时算出的、依赖输入的全连接矩阵。"固定的线性变换"与"数据依赖的线性变换"这一区分,正是 attention 的本质。</div>
+</section>
+
+<!-- ================= 第 8 章(新增) ================= -->
+<section class="chapter" id="ch17">
+<span class="ch-label">第 8 章</span>
+<h2>秩、行列式与线性方程组:信息是否够、解是否存在</h2>
+
+<h3>8.1 秩:特征矩阵里"真正有用的信息量"</h3>
+<p>秩 = 线性无关行(列)的最大个数 = 变换后空间的维度。</p>
+<div class="calc">
+<div class="calc-title">演算:三个数据矩阵的命运</div>
+<div class="step">$A_1=\begin{pmatrix}1&2\\3&4\end{pmatrix}$:两行不成比例 → <b>rank=2(满秩)</b>,两个特征都有独立信息</div>
+<div class="step">$A_2=\begin{pmatrix}1&2\\2&4\end{pmatrix}$:第 2 列 = 第 1 列 × 2 → <b>rank=1</b>。想象列 1 是体温 ℃、列 2 是换算后的 ℉×0.05 —— 名义上 2 个特征,实际 1 份信息,平面被压成一条线(<b>信息塌缩</b>)</div>
+<div class="step"><span class="lbl">医疗实例:</span>肌酐、由公式算出的 eGFR、尿素氮同时入模 —— eGFR 几乎是其他变量的确定性函数,特征矩阵接近秩亏,回归系数会变得极不稳定(符号反直觉、置信区间巨大)。<b>诊断:算秩 / 条件数;治疗:删冗余特征或加正则。</b></div>
+</div>
+
+<h3>8.2 行列式:变换的"面积缩放率"</h3>
+<p>$\det\begin{pmatrix}a&b\\c&d\end{pmatrix} = ad-bc$;$|\det|$ = 面积放大倍数;$\det = 0 \iff$ 压扁 ⇔ 不可逆。</p>
+<div class="calc">
+<div class="calc-title">演算</div>
+<div class="step">$A_1$:det $= 4-6 = -2$ → 面积 ×2(负号=镜像),可逆 ✓;$A_2$:det $= 4-4 = 0$ → 压扁,不可逆 ✓(与秩的判断一致)</div>
+</div>
+
+<h3>8.3 逆矩阵与最小二乘:从数据反推评分权重</h3>
+<p>$A^{-1}$ 是"撤销"变换的矩阵。线性回归的解析解 —— <b>正规方程</b>:$\hat\beta = (X^\top X)^{-1}X^\top y$</p>
+<div class="calc">
+<div class="calc-title">演算:用心率预测住院天数(3 位患者)</div>
+<div class="step"><span class="lbl">数据:</span>$X = \begin{pmatrix}1&70\\1&90\\1&110\end{pmatrix}$(第 1 列截距,第 2 列入院心率),y = (3, 5, 7) 天</div>
+<div class="step"><span class="lbl">$X^\top X = \begin{pmatrix}3&270\\270&25100\end{pmatrix}$,$X^\top y = \begin{pmatrix}15\\1430\end{pmatrix}$</span><br>
+<span style="font-size:13px;color:var(--ink3)">(25100 = 70²+90²+110² = 4900+8100+12100;1430 = 70×3+90×5+110×7)</span></div>
+<div class="step"><span class="lbl">求逆:</span>det $= 3\times25100 - 270^2 = 75300-72900 = 2400$<br>
+$(X^\top X)^{-1} = \frac{1}{2400}\begin{pmatrix}25100&-270\\-270&3\end{pmatrix}$</div>
+<div class="step"><span class="lbl">解:</span>$\hat\beta_0 = \frac{25100\times15 - 270\times1430}{2400} = \frac{376500-386100}{2400} = \frac{-9600}{2400} = -4$<br>
+$\hat\beta_1 = \frac{-270\times15 + 3\times1430}{2400} = \frac{-4050+4290}{2400} = \frac{240}{2400} = 0.1$<br>
+<b>住院天数 ≈ −4 + 0.1×心率</b>(心率 70 → 3 天、90 → 5 天、110 → 7 天,全部吻合 ✓)</div>
+</div>
+<div class="warnbox"><b>工程红线:实际中从不显式求逆!</b>①$O(n^3)$ 慢;②特征共线时 $X^\top X$ 接近奇异,逆矩阵元素爆炸,解被舍入误差吞掉。正确姿势:QR/SVD 求解器;或<b>岭回归(Ridge)</b> $(X^\top X + \lambda I)^{-1}X^\top y$ —— 给对角线加 $\lambda I$ 强制可逆且压缩系数,这正是 <b>L2 正则的代数真身</b>(第 4 章的几何故事与这里互为表里)。</div>
+</section>
+
+<!-- ================= 第 9 章 ================= -->
+<section class="chapter" id="ch4" data-page-node-id="iwXgA3WYTD5SzILmmpxVxQ">
+<span class="ch-label" data-page-node-id="JYv74HAHN5QIpYCELNAFTD">第 9 章</span>
+<h2 data-page-node-id="DBnuDpm5OjyL77BOhV8gfV">协方差矩阵:统计意义上的"特征一起动"</h2>
+
+<h3 data-page-node-id="OngFw3KWRORHTXcrWnZlQc">4.1 从患者队列到协方差矩阵</h3>
+<p data-page-node-id="WxJQIwo91x1zP137awMGUO">收集 $N$ 位患者(或 $N$ 个时刻)的<b data-page-node-id="d71anz6WukvGrKrQ5f2162">中心化</b>数据 $X \in \mathbb{R}^{N\times 3}$(每列均值已减为 0),协方差矩阵:</p>
+$$\Sigma = \frac{1}{N}X^\top X \in \mathbb{R}^{3\times 3}, \qquad \Sigma_{ij} = \frac{1}{N}\sum_n x^{(n)}_i x^{(n)}_j$$
+<ul data-page-node-id="pVVx4THgZ6CRWsCNdbVQSD">
+<li data-page-node-id="XL83mw7ejzNIZhIIPya6kc">对角线 $\Sigma_{ii}$ = 特征 $i$ 的<b data-page-node-id="AVcmqzWsfbEeVBb0ZJsYf0">方差</b>(该特征波动有多大);</li>
+<li data-page-node-id="OvckJQzVd8QgK7ZbH99CKM">非对角 $\Sigma_{ij}$ = 特征 $i,j$ 的<b data-page-node-id="FfFhEw8I8RbDtDuBVXLkPr">协方差</b>(它们是否一起涨落)。<b>当且仅当</b>数据已按 z-score 标准化(中心化 <b>且</b> 每列标准差为 1,用总体标准差则配 $\frac1N$、样本标准差则配 $\frac1{N-1}$)时,$\Sigma$ 才恰好等于<b data-page-node-id="z0AcOSejXz0ltBYKkyM7qA">相关矩阵</b>(对角线全 1,非对角 ∈ [−1,1])。仅中心化而未归一方差时,它只是协方差矩阵,相关系数要另算 $\rho_{ij} = \Sigma_{ij}/\sqrt{\Sigma_{ii}\Sigma_{jj}}$。</li>
+</ul>
+<div class="calc" data-page-node-id="uxHwq3SmIqzKxFWjnTCrVi">
+<div class="calc-title" data-page-node-id="IweLZsGDwWttUJLFMP4L8J">演算:4 位患者算血糖-心率相关性</div>
+<div class="step" data-page-node-id="ecNMVokboXtsIWKXxwG6VH"><span class="lbl" data-page-node-id="ohOCAhDBFVRx1yXwyo1qvC">中心化数据(均值 0,但方差未归一 —— 所以算的是协方差,相关要再除标准差):</span><br data-page-node-id="2Oon0DfH57snK4AcBSnnz3">
+P1(2.0, 1.5), P2(1.0, 1.0), P3(−1.0, −0.5), P4(−2.0, −2.0)</div>
+<div class="step" data-page-node-id="TaM0COAAlril1PJvnEuJ5x"><span class="lbl" data-page-node-id="Xi9sYHIcyT1g8fuMT8Cm0y">协方差:</span>$\Sigma_{G,H} = \frac{1}{4}[2.0\times1.5 + 1.0\times1.0 + (-1.0)(-0.5) + (-2.0)(-2.0)]$<br data-page-node-id="V05Zsj7cYff27WajTzexpk">
+$= \frac{1}{4}[3.0 + 1.0 + 0.5 + 4.0] = \frac{8.5}{4} = 2.125$</div>
+<div class="step" data-page-node-id="afyPakd2ec2FRHfgxuwPhr"><span class="lbl" data-page-node-id="LNtEu1DzVfvLyb3dCgR8Yl">方差:</span>$\Sigma_{G,G} = \frac{1}{4}(4+1+1+4) = 2.5$;$\Sigma_{H,H} = \frac{1}{4}(2.25+1+0.25+4) = 1.875$</div>
+<div class="step" data-page-node-id="DrZLOc6WdSPA4pejdhpmPT"><span class="lbl" data-page-node-id="T3FZ1gJ7NEmPiwiRAKvfLA">相关系数:</span>$\rho = \frac{2.125}{\sqrt{2.5\times1.875}} = \frac{2.125}{2.165} = \mathbf{0.98}$ —— 强正相关:在该队列中,血糖高的患者心率普遍也快 ✓</div>
+</div>
+<div class="meaning" data-page-node-id="BYbpedNBCGtdKhAEit0Ed1"><b data-page-node-id="OVDuVEYIb5RxhGydyHODhZ">现实意义:</b>$\Sigma$ 是<b data-page-node-id="LFHx3aaw0AYyiFWNhd6byx">队列层面、统计层面</b>的对象:它回答"在这群患者中,血糖和心率是否一起变化"。注意三个限定词 —— 队列(不是单个患者)、统计(不是因果)、线性(Pearson 只捕捉线性共变)。第 13 章你会看到,这三个限定词正是 attention 解读最容易越界的地方。另外,$X^\top X$ 这种"自身乘自身转置"的矩阵叫 <b data-page-node-id="Cz7iRjEKPy2TFkZtiG6Tzw">Gram 矩阵</b>,它必然对称半正定 —— 保证相关矩阵可以安全地做特征分解(下一章)。</div>
+
+<h3 data-page-node-id="yjwv0hjqFOPBPzEwo75tE7">4.2 相关 ≠ 因果:医疗数据的经典陷阱</h3>
+<div class="warnbox" data-page-node-id="TGI6rfuMEXYDURZ3joITrP"><b data-page-node-id="mj7l6KQJHYrSN3kmBKXX8f">例:</b>队列中发现"使用胰岛素"与"死亡率"正相关。不是胰岛素致死,而是病情重的患者才用胰岛素(<b data-page-node-id="wsQrYCMPrFtijhR7zGq3Lb">混杂因子</b>:病情严重程度同时导致用药和死亡)。相关矩阵 $\Sigma$ 永远只能给你第一个层面的事实。因果推断需要随机对照试验、倾向评分、工具变量等另一套方法论。</div>
+</section>
+
+<!-- ================= 第 10 章 ================= -->
+<section class="chapter" id="ch5" data-page-node-id="XFeHWPx1OWOmHoqz0aDLkK">
+<span class="ch-label" data-page-node-id="3DK3OZFaGUYSPhEtIB6Nti">第 10 章</span>
+<h2 data-page-node-id="KGWqX3xoA8clfzhG5o2Sah">特征值与 PCA:把患者队列画在一张图上</h2>
+
+<h3 data-page-node-id="utvAByy0EGNSS80znTkcG5">5.1 主成分 = 队列差异的"主轴"</h3>
+<p data-page-node-id="41g6GuDxUEFdN9aFgLsXHS">对协方差矩阵做特征分解 $\Sigma = Q\Lambda Q^\top$:特征向量 $q_1$ 是患者之间差异最大的方向,特征值 $\lambda_1$ 是该方向上的方差大小。</p>
+<div class="calc" data-page-node-id="C5XUnvFXMqsNoXXr0nBiSf">
+<div class="calc-title" data-page-node-id="EKcSC8gABfiz4NacJa5SXD">演算:接上章,2×2 相关结构的特征分解</div>
+<div class="step" data-page-node-id="37g7z1OEnUbCWJ6ltkEJ9t">$\Sigma = \begin{pmatrix}2.5 & 2.125\\2.125 & 1.875\end{pmatrix}$,特征方程:$\lambda^2 - 4.375\lambda + (4.6875-4.5156) = \lambda^2 - 4.375\lambda + 0.172 = 0$</div>
+<div class="step" data-page-node-id="VMjorHE5ap0opgy9eRC7Hj">$\lambda_1 = 4.335$(占 99.1%),$\lambda_2 = 0.040$(占 0.9%)</div>
+<div class="step" data-page-node-id="2VmJdL9cDhGhO8uu0qcUE5"><span class="lbl" data-page-node-id="jKEsNlagaJL23HXCf727Vg">主方向:</span>$(\Sigma - 4.335I)q = 0 \Rightarrow q_1 \approx (0.76, 0.65)$ —— 血糖权重 0.76、心率权重 0.65 的组合方向</div>
+<div class="step" data-page-node-id="b6l5wdL1AU72aDL9AwGafm"><span class="lbl" data-page-node-id="6xXBLmU7PB4KxCTZnUzszV">医学解读(带条件):</span>PCA 能保证的只是:PC1 是该队列<b>方差最大</b>的方向,99% 的患者间差异沿它分布。至于它是不是"病情严重度",PCA 本身不知道 —— 只能说它构成一个<b>候选的潜在严重度轴</b>,必须额外验证(如计算 $\mathrm{corr}(PC1, \text{临床严重度/结局})$)才能下这个结论。把"最大方差方向"直接命名为临床概念,是 PCA 解读最常见的越界 ✓</div>
+</div>
+
+<div class="demo" data-page-node-id="O42VMzw432w2mRRnEJfRhC">
+<div class="demo-title" data-page-node-id="L7Bh7GLHvWap4cOYj1HpgZ">交互演示:患者队列的 PCA 视图</div>
+<p style="font-size:13.5px;color:var(--ink2)" data-page-node-id="UnMwVnq27S4UWGp1QzQVx4">每个点是一位患者(血糖-心率平面,已标准化)。调节"真实共变强度",观察 PC1(红箭头)如何旋转对齐数据主轴 —— 它找到的就是"患者差异最大的方向"。</p>
+<div class="controls" data-page-node-id="5B8erl9RL5dTXHxmCKBwep">
+  <label data-page-node-id="0uwBnyCu1lQhRuz4uAMiZZ">血糖-心率共变强度: <input type="range" id="pcaC" min="5" max="98" value="85" data-page-node-id="ihN5BzjY1vMmnSRRHfrCux"> <span id="pcaCV" data-page-node-id="29z41cR7d6VIPCBXoROtKr">0.85</span></label>
+  <button id="pcaRegen" data-page-node-id="PpIH2znYEDTC07BShQ9sd4">重新抽样队列</button>
+</div>
+<canvas id="pcaCanvas" width="460" height="400" data-page-node-id="67wIWit1hUWfYyWQ8N2nSf"></canvas>
+<div class="readout" id="pcaOut" data-page-node-id="FA2uiVrEB3CvwSeGYHGkJ9"></div>
+</div>
+
+<div class="meaning" data-page-node-id="qn6VbMCIAanvnJVv9R7Pzw"><b data-page-node-id="ai2p3ySaDrYHGrEkXoj7ns">现实意义:</b>①论文里常见的"队列可视化图"(患者点云按结局着色,呈明显梯度)就是 PCA/t-SNE/UMAP 的产物 —— 其中 PCA 是唯一有严格线性代数解释的方法;②特征值衰减速度(谱)告诉你队列有几个独立的"变异模式":若前 2 个特征值占 95%,说明患者虽千差万别,本质上只沿 2 个轴变化;③这也解释了表征学习为什么可行:高维医疗数据的真实自由度(intrinsic dimension)远比 F 小。</div>
+</section>
+
+<!-- ================= 第 11 章(新增) ================= -->
+<section class="chapter" id="ch18">
+<span class="ch-label">第 11 章</span>
+<h2>SVD 奇异值分解:任何矩阵 = 旋转 × 拉伸 × 旋转</h2>
+
+<h3>11.1 分解与最优低秩近似</h3>
+$$A = U\Sigma V^\top$$
+U、V 正交(旋转),Σ 对角(奇异值 $\sigma_1 \ge \sigma_2 \ge \cdots \ge 0$)。<b>Eckart–Young 定理:</b>只保留前 k 个奇异值,得到在所有秩-k 矩阵中误差最小的近似 $A_k = U_k\Sigma_kV_k^\top$。
+
+<div class="meaning"><b>对 EHR 的三层意义:</b>①<b>患者原型:</b>对队列矩阵(患者×特征)做 SVD,若前 5 个奇异值占能量 95%,说明几千名患者本质上由 ~5 种"原型模式"混合而成 —— 表型分型(phenotyping)的代数基础;②<b>压缩:</b>低秩近似用 $k(m+n)$ 个数代替 $mn$ 个 —— 但注意:<b>低秩 ≠ 隐私保护</b>,$A_k$ 仍可能保留稀有患者的可重构信息,隐私场景必须另加去标识化/差分隐私/聚合机制;③<b>Med2Vec/代码嵌入:</b>诊断代码共现矩阵(类似 NLP 的 PMI 矩阵)做 SVD,就得到 ICD 代码的向量嵌入 —— 医疗表征学习的开山之作正是矩阵分解。</div>
+
+<div class="calc">
+<div class="calc-title">演算:2×2 的 SVD 全貌</div>
+<div class="step"><span class="lbl">$A = \begin{pmatrix}3&0\\0&1\end{pmatrix}$ 已是"拉伸"形:</span>$U = I$,$\Sigma = \begin{pmatrix}3&0\\0&1\end{pmatrix}$,$V = I$<br>
+奇异值 3 和 1:血糖方向能量 3 倍于血压方向</div>
+<div class="step"><span class="lbl">秩-1 近似:</span>$A_1 = 3\,u_1v_1^\top = \begin{pmatrix}3&0\\0&0\end{pmatrix}$ —— 扔掉 σ=1 的方向,保留 90% 能量($9/(9+1)$,能量 = 奇异值平方)。<b>奇异值的相对大小 = 各方向信息量,小奇异值方向可以安全丢弃</b> ✓</div>
+<div class="step"><span class="lbl">与特征分解的关系:</span>奇异值 = $\sqrt{A^\top A\text{ 的特征值}}$。对第 10 章的对称协方差矩阵,两者重合 —— PCA 就是协方差矩阵的特征分解,也可直接对数据中心化矩阵做 SVD 得到(数值上更稳,不求 $X^\top X$)。</div>
+</div>
+<div class="meaning"><b>通往 LoRA 的桥:</b>SVD 说"大矩阵可由少量方向近似";LoRA 则把微调增量<b>显式参数化</b>为 $\Delta W = BA$(因此 $\mathrm{rank}(\Delta W)\le r$)—— 这是结构假设/归纳偏置,不是证明了"真实最优更新必然低秩"。第 20 章的医疗 LoRA 应用,理论根基就在这里。</div>
+</section>
+
+<!-- ================= 第 12 章 ================= -->
+<section class="chapter" id="ch6" data-page-node-id="BXQ1WDhUvVMLNwgkKWnjSM">
+<span class="ch-label" data-page-node-id="Bn4uSi6HfKDnHoM654tcZl">第 12 章</span>
+<h2 data-page-node-id="Qi9hdEp1kRQ20ROmOuHKjl">Feature Attention 完整精算:特征之间如何"互相参考"</h2>
+<p data-page-node-id="HZzKBxRzFKVkXtaLsfzuTW">把 3 个特征当作 3 个 token 做自注意力。本章分两步:12.1 先用固定嵌入把<b>计算机制</b>算透;12.2 再建立真正依赖患者状态的严格框架 $X_p \to E_p \to Q_p,K_p \to A_p \to H'_p$ —— 你将看到,只有后者才配叫 <b>patient-specific attention</b>。</p>
+
+<div class="calc" data-page-node-id="224jXlZr5oIGIRkiFJq57v">
+<div class="calc-title" data-page-node-id="Cqj71IepEcGqFSOO37C0VR">12.1 机制演算 · 第 1 步:特征嵌入与 Q/K/V 投影(教学版,嵌入先固定)</div>
+<div class="step" data-page-node-id="qN5T9chjIHDnVYO1BAsiXY"><span class="lbl" data-page-node-id="5h1O6UnM8iEaRPsOEx8roU">把三个特征的嵌入向量(各 2 维,由嵌入矩阵 $W_e$ 学得)排成矩阵:</span><br data-page-node-id="b6IGQd3kppFvqUQTHY4c0J">
+<span class="mtx" data-page-node-id="76dhXWKg6kUauugpEhSint">E = [1  0]  ← Glucose 的嵌入
+    [0  1]  ← HR 的嵌入
+    [1  1]  ← BP 的嵌入</span></div>
+<div class="step" data-page-node-id="FyICTHCYLAvlHjqYsX0hS3"><span class="lbl" data-page-node-id="f7QohPilucWpAcZwHDaQCR">投影(演示用矩阵):</span>$W^Q = I$,$W^K = \begin{pmatrix}1&1\\0&1\end{pmatrix}$,$W^V = \begin{pmatrix}1&0\\0&2\end{pmatrix}$<br data-page-node-id="VREqXEEQexrYJIpL1ntPQ8">
+$Q = EW^Q = E$;$K = EW^K = \begin{pmatrix}1&1\\0&1\\1&2\end{pmatrix}$;$V = EW^V = \begin{pmatrix}1&0\\0&2\\1&2\end{pmatrix}$</div>
+</div>
+
+<div class="calc" data-page-node-id="YnhYyH8nYK1MkmUb2hlbtG">
+<div class="calc-title" data-page-node-id="EoI4UDQ6sq8epsx7yISOlL">第 2 步:QKᵀ —— 原始注意力分数</div>
+<div class="step" data-page-node-id="5ofp3xIAZQ9EXg1oEY2dEU">$QK^\top = \begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix}\begin{pmatrix}1&0&1\\1&1&2\end{pmatrix} = \begin{pmatrix}1&0&1\\1&1&2\\2&1&3\end{pmatrix}$<br data-page-node-id="kACR0aEIclOEHF3b4YPi1r">
+<span style="font-size:13px;color:var(--ink3)" data-page-node-id="OxJmrIL6JvXARXQIskF4ny">第 i 行第 j 列 = 特征 i 的 Query 与特征 j 的 Key 的点积 —— "i 想从 j 那里取多少信息"的原始分</span></div>
+<div class="step" data-page-node-id="bimcazQjIEoKQyR4lh43gj"><span class="lbl" data-page-node-id="bsVqdLC3aBjMRl93rtJwB1">缩放(÷√d_k = √2 ≈ 1.414)后逐行 softmax:</span><br data-page-node-id="CHUpkNmeI9gFEU4RuUa0bE">
+$A = \begin{pmatrix}0.40&0.20&0.40\\0.25&0.25&0.50\\0.28&0.14&0.58\end{pmatrix}$ <span style="font-size:13px;color:var(--ink3)" data-page-node-id="EgrTdTrtH50F4br1jqGivd">(每行和为 1)</span></div>
+</div>
+
+<div class="calc" data-page-node-id="jtSfAT5K4IvUnWYe3ON7YZ">
+<div class="calc-title" data-page-node-id="TcrWwkQeWrl28KzgzOlGAz">第 3 步:逐行解读(这是论文分析的标准句式)</div>
+<div class="step" data-page-node-id="PyRDGJ1Ac0vWM1d2jksJCa"><span class="lbl" data-page-node-id="8D9LoaB1H12jSdI9aFc77r">第 1 行(血糖):</span>$\text{new Glucose} = 0.40\,V_G + 0.20\,V_H + 0.40\,V_B$<br data-page-node-id="TrANlKLfBYFttJqeOCDpw4">
+→ 更新血糖表征时,血糖/心率/血压<b>各自 value 向量的聚合权重</b>为 0.40 / 0.20 / 0.40</div>
+<div class="step" data-page-node-id="zVcAzjPBNUAUOXrHbIMNyB"><span class="lbl" data-page-node-id="eFhvc3iI53sWXLtlElb2tb">第 3 行(血压):</span>$\text{new BP} = 0.28\,V_G + 0.14\,V_H + 0.58\,V_B$<br data-page-node-id="Y5C2poZw8nM54S21WRNz2J">
+→ 血压表征中,自身 value 的聚合权重最大(0.58),血糖 value 次之(0.28)</div>
+<div class="step"><span class="lbl">⚠ 措辞红线:</span>$A_{ij}=0.7$ 只能说"$v_j$ 的<b>聚合权重</b>为 0.7",<b>不能</b>说"70% 的信息来自特征 j" —— 最终表征中各来源的实际贡献还取决于各 $v_j$ 的方向、模长以及彼此间的抵消/增强。权重 ≠ 信息贡献占比。</div>
+<div class="step" data-page-node-id="vMbzqM4kGTAawNLydGkqoH"><span class="lbl" data-page-node-id="zAZ7G6zsim2q4h37PDxd8A">第 4 步:H′ = AV,以血压行为例:</span><br data-page-node-id="idRdaUsmeoAdlKiBcAPApH">
+$h'_B = 0.28(1,0) + 0.14(0,2) + 0.58(1,2) = (0.86, 1.44)$<br data-page-node-id="DqXE1RMP8Abjhl4k9ECIPL">
+新向量已不再是"纯血压",而是融合了血糖与心率上下文的 <b data-page-node-id="4GYfkc5OyzSM14kjJVqP6T">contextual representation</b> ✓</div>
+</div>
+
+<div class="keybox" data-page-node-id="ZD136sTUTsD0kn2RiTngCn"><b data-page-node-id="9k1S6rxVjhlxI9hlObM96V">核心公式再强调(严谨版):</b>$$A_{ij} = \text{特征 }i\text{ 更新自身表征时,对特征 }j\text{ 的 value 向量 }v_j\text{ 施加的聚合权重}$$行 = 接收方(query),列 = 提供方(key/value)。<b data-page-node-id="baHD53UvgzLK5kXifxN0wT">行和为 1,列和没有任何约束</b> —— 某特征可以"被所有人参考"(列和大),这不违反任何规则。它是 $h'_i = \sum_j A_{ij}v_j$ 里的<b>加权系数</b>,不是信息占比、不是相关、更不是因果。</div>
+<div class="warnbox"><b>12.1 的故意留白:</b>上面的 $E$、$W^Q$、$W^K$、$W^V$ 全是固定矩阵,因此算出的 $A$ 对<b>所有患者都相同</b> —— $A_{P1} = A_{P2}$。它可以教机制,但<b>不能</b>作为 patient-specific interaction 的证据。真正的个体化交互必须让嵌入依赖患者状态,见 12.2。</div>
+
+<h3>12.2 严格框架:让 E_p 依赖患者状态,$A_{P1}\neq A_{P2}$ 才真正成立</h3>
+<p>patient-specific attention 的逻辑链必须是:<b>患者状态不同 → 特征 token 嵌入不同 → Q/K 不同 → A 不同</b>。断掉任何一环,"个体化交互"就是空话。一种最小实现:基础嵌入按该患者该特征的标准化取值缩放 —— $e_{p,i} = (1+\tfrac12 x'_{p,i})\cdot e^{base}_i$(缩放因子 $\alpha_i = 1+\tfrac12 x'_i$,保证非负且随异常程度放大)。</p>
+
+<div class="calc">
+<div class="calc-title">第 1 步:两位患者 → 两个不同的嵌入矩阵</div>
+<div class="step"><span class="lbl">患者 P1(休克前期)x' = (2.0, 1.5, −1.0):</span>缩放因子 $\alpha = (2.0,\ 1.75,\ 0.5)$<br>
+<span class="mtx">E_P1 = [2    0   ]  ← 2.0 × (1,0)  Glucose
+       [0    1.75]  ← 1.75 × (0,1) HR
+       [0.5  0.5 ]  ← 0.5 × (1,1)  BP</span></div>
+<div class="step"><span class="lbl">患者 P2(稳定期)x' = (0.2, 0.0, 0.4):</span>$\alpha = (1.1,\ 1.0,\ 1.2)$<br>
+<span class="mtx">E_P2 = [1.1  0  ]
+       [0    1  ]
+       [1.2  1.2]</span></div>
+<div class="step"><span class="lbl">投影矩阵同 12.1:</span>$W^Q = I$,$W^K = \begin{pmatrix}1&1\\0&1\end{pmatrix}$。注意 $W^Q, W^K$ 是跨患者共享的 —— <b>个体差异全部来自 $E_p$,这正是"模型共享 + 交互个体化"的结构</b>。</div>
+</div>
+
+<div class="calc">
+<div class="calc-title">第 2 步:P1 的 QKᵀ 与 A_P1</div>
+<div class="step">$K_{P1} = E_{P1}W^K = \begin{pmatrix}2&2\\0&1.75\\0.5&1.0\end{pmatrix}$,$Q_{P1}K_{P1}^\top = \begin{pmatrix}4&0&1\\3.5&3.06&1.75\\2&0.88&0.75\end{pmatrix}$</div>
+<div class="step"><span class="lbl">÷√2 后逐行 softmax:</span><br>
+$A_{P1} \approx \begin{pmatrix}0.85&0.05&0.10\\0.49&0.36&0.14\\0.54&0.24&0.22\end{pmatrix}$</div>
+</div>
+
+<div class="calc">
+<div class="calc-title">第 3 步:P2 的 QKᵀ 与 A_P2 —— 对照</div>
+<div class="step">$K_{P2} = \begin{pmatrix}1.1&1.1\\0&1\\1.2&2.4\end{pmatrix}$,$Q_{P2}K_{P2}^\top = \begin{pmatrix}1.21&0&1.32\\1.1&1.0&2.4\\2.64&1.2&4.32\end{pmatrix}$</div>
+<div class="step"><span class="lbl">÷√2 后逐行 softmax:</span><br>
+$A_{P2} \approx \begin{pmatrix}0.40&0.17&0.43\\0.23&0.21&0.56\\0.22&0.08&0.71\end{pmatrix}$</div>
+</div>
+
+<div class="calc">
+<div class="calc-title">第 4 步:对比 —— 真正的 patient-specific interaction</div>
+<div class="step"><span class="lbl">同一对特征(心率行 × 血糖列):</span>$A^{P1}_{H,G} = \mathbf{0.49}$ vs $A^{P2}_{H,G} = \mathbf{0.23}$<br>
+→ 休克前期患者的心率表征对血糖 value 的聚合权重(0.49)是稳定期患者(0.23)的两倍多</div>
+<div class="step"><span class="lbl">逻辑链闭合:</span>$X_{P1}\neq X_{P2} \Rightarrow E_{P1}\neq E_{P2} \Rightarrow QK^\top \neq \Rightarrow A_{P1}\neq A_{P2}$ ✓ —— 现在每一环都有数字支撑,"个体化交互"不再是修辞。</div>
+<div class="step"><span class="lbl">合规表述:</span>"For P1, the value vector of glucose receives an aggregation weight of 0.49 when updating the HR representation, versus 0.23 for P2 — suggesting that the learned feature interaction is <b>patient-state-dependent</b>."(说 weight、说 learned interaction;不说 correlation、causation、information percentage)</div>
+</div>
+
+<div class="demo" data-page-node-id="EKctIJTPYdKDxDS7C1JlTO">
+<div class="demo-title" data-page-node-id="FR1F52XL27HIiRDPNXtuzD">交互演示:Feature Attention 热力图与逐行解读</div>
+<p style="font-size:13.5px;color:var(--ink2)" data-page-node-id="Tfvv6AdJaNEMHZOuR9GVH4">切换患者 / 调节"血糖→心率"交互强度,观察注意力矩阵变化。下方文字同步生成论文式解读 —— 注意它的合规措辞是"<b>value 的聚合权重</b>",而不是"信息贡献百分比",更不是"相关"或"因果"。</p>
+<div class="controls" data-page-node-id="6YvxwtrCtJr4CAPX1saH6e">
+  <label data-page-node-id="5J5qvo0F1DS3ZWOXe2RgUv">患者:
+    <button class="ghost" id="attP1" data-page-node-id="Ux8tCp8DfyaJVDjshaPeT3">P1 休克前期</button>
+    <button class="ghost" id="attP2" data-page-node-id="lvcRYMd7uJs1Y2WvkWv07j">P2 稳定期</button>
+  </label>
+  <label data-page-node-id="05XBOCFmDmc4EDi3bPVqqL">血糖↔心率交互强度: <input type="range" id="attS" min="0" max="100" value="70" data-page-node-id="iBhy4JUnzKmoZe7xrH3Ujg"> <span id="attSV" data-page-node-id="Zfk8GZA6L054BI1k0MAIQJ">0.70</span></label>
+</div>
+<canvas id="attCanvas" width="540" height="300" data-page-node-id="nqbxD6H9BFCtNLAcsADYnZ"></canvas>
+<div class="readout" id="attOut" data-page-node-id="UjnSgy7APvBVtoT2lBAIX2"></div>
+</div>
+</section>
+
+<!-- ================= 第 13 章 ================= -->
+<section class="chapter" id="ch7" data-page-node-id="NWd9FRIRCEgvqPQhnrxXSU">
+<span class="ch-label" data-page-node-id="5BKB4nwBmZG8b83DXddx0E">第 13 章</span>
+<h2 data-page-node-id="67KJRqsR7owNSkQEcCU0FF">四概念辨析:论文写作的红线</h2>
+<p data-page-node-id="k7WTAMF7uQ3rCCsIxYadcd">这是本教程最重要的一章。四个概念在数学上是四个<b data-page-node-id="FhtBdd3p7EUnO2qtFKubE1">不同的对象</b>,但论文里经常被混用:</p>
+
+<div class="quad" data-page-node-id="vGgQ7uOgQKNi54QHtz9Zio">
+<div class="q" data-page-node-id="R0K4FVteoptb6DQ3acm9fb">
+<h4 data-page-node-id="kWY6pbccabb3depeKU5YzX">① Feature Weight(特征权重)</h4>
+<div class="formula" data-page-node-id="n8wlAGd68D5qcpeEeqikYJ">w_i ∈ R, 标量/向量</div>
+<p data-page-node-id="aiL6hCUjNtFAlo1xv1I3ne">回答:<b data-page-node-id="r6uz6kZOFVRcp76alZA5pi">"这个特征本身有多重要?"</b><br data-page-node-id="QYlDLDXVeZVJt2zvK2e6HU">
+形态:一个向量 $w = [0.6, 0.3, 0.1]$,每个特征一个数。<br data-page-node-id="Vp538OoqsgblKa7LJWKjBa">
+来源:特征重要度、注意力池化权重、SHAP、排列重要性。</p>
+</div>
+<div class="q" data-page-node-id="UN5DgAXTCLwVyI8ZbkuZhj">
+<h4 data-page-node-id="Qn9CidUVt6JyIFHkwnCw0Y">② Feature Attention(特征注意力)</h4>
+<div class="formula" data-page-node-id="6rcnLbHVvXHlOMwPXzcbqh">A_ij, 方阵(每行和为1)</div>
+<p data-page-node-id="lgt1xBTVePRWfBqkt5Ry1z">回答:<b data-page-node-id="FBcmM2GHQ5FYTLTgUNNdNX">"特征 i 更新自己时,对特征 j 的 value 施加多大聚合权重?"</b><br data-page-node-id="Eh0n1DiYMrjhAx1I0pjQP6">
+形态:$h'_i=\sum_j A_{ij}v_j$ 中的加权系数;逐患者的(仅当嵌入依赖患者状态,见 12.2)、上下文化的。<br data-page-node-id="GB378N549jG0qWF9nLn276">
+本质:$\mathrm{softmax}(QK^\top/\sqrt d)$,是<b data-page-node-id="s54kWIkIE3FVcClBM0Gwk2">表征构建机制</b>;权重 ≠ 信息贡献占比。</p>
+</div>
+<div class="q" data-page-node-id="UuObzhrSJjVKOTfRUQChJp">
+<h4 data-page-node-id="yL47CGghLypsVcpEcuqS1x">③ Correlation(统计相关)</h4>
+<div class="formula" data-page-node-id="fRK70g5Cb63PMDAGeLUxDQ">corr(x_i, x_j) ∈ [-1,1]</div>
+<p data-page-node-id="4U9OSDBVIgQHJ46axas15H">回答:<b data-page-node-id="cpeTw8AtadAAzc6PFpE1Sg">"队列中两个特征是否一起变化?"</b><br data-page-node-id="6Hc4Xtsl971dOMAzE1f4Vo">
+形态:协方差矩阵归一化,队列级、对称、无方向。<br data-page-node-id="uLJkbIBX7FqbCzFx8Soj6i">
+来源:第 9 章的 $\Sigma$,纯统计对象,与模型无关。</p>
+</div>
+<div class="q" data-page-node-id="lgEGMUEebD3GCl6Bxwa6qT">
+<h4 data-page-node-id="IFBB4VTjUOJEZ7337QAF2J">④ Causality(因果关系)</h4>
+<div class="formula" data-page-node-id="nsfeDRbir0jcwtBm5XscN6">do(x_i) → x_j ?</div>
+<p data-page-node-id="V3T1kjvhaKxMVaqoHxcmYj">回答:<b data-page-node-id="7NCXqk5HahOokvc7eTJJRB">"干预特征 i 是否会改变特征 j?"</b><br data-page-node-id="Cv8fH41WBAkrNwDPiTXrEW">
+形态:结构因果模型 / 干预分布。<br data-page-node-id="SBInKAevUkiiJbsChw43SG">
+来源:随机对照试验、因果推断框架 —— <b data-page-node-id="vhFZSEKb7JaSQ9TSddeACA"> observational 数据 + 任何矩阵都算不出来</b>。</p>
+</div>
+</div>
+
+<div class="calc" data-page-node-id="kBhLY8xNeWalQPjxxUsN1H">
+<div class="calc-title" data-page-node-id="ZzGocvbKmt1zoOhz1EBuaA">对照演算:同一批数据,四个对象各是什么</div>
+<div class="step" data-page-node-id="Q8GMK0Iyzy6bJD1KlhTNi3"><span class="lbl" data-page-node-id="pm2cFtdXdHIzA85pqY5jDH">Attention(患者 P1):</span>$A^{P1}_{G,H} = 0.7$ —— "更新 P1 的血糖表征时,心率 value 的聚合权重为 0.7"(个体、有方向、机制性;不是"70% 信息来自心率")</div>
+<div class="step" data-page-node-id="F2HGFd9yz1d0o49ZA6Izuy"><span class="lbl" data-page-node-id="9TAPH8KfLFq4Af4F0FPhCI">Correlation(整个队列):</span>$\rho_{G,H} = 0.98$ —— "队列中血糖与心率强正相关"(群体、对称、统计性)</div>
+<div class="step" data-page-node-id="QRRw6A55jhV2vmGYqF18G5"><span class="lbl" data-page-node-id="rfGMGPWblcCfSOAUtqg69P">Feature weight:</span>$w_G = 0.6$ —— "对预测任务,血糖贡献最大"(任务相关,无方向)</div>
+<div class="step" data-page-node-id="I0MzZFzjznkzKaD5HPJlOj"><span class="lbl" data-page-node-id="XD9dLGidWEFjEXkoN6ixzF">Causality:</span>以上三个<b data-page-node-id="wqnVL8kqGdNBCyYha5d1G4">都无法回答</b>"降低心率能否降低血糖" —— 需要干预数据 ✓</div>
+</div>
+
+<div class="warnbox" data-page-node-id="YUfO7Hn6QOBgSl78izcKDw"><b data-page-node-id="bUGxGK3K7wrtOpODdlNY3h">论文红线(checklist):</b>
+<ul style="margin:6px 0" data-page-node-id="ENw37QXlJbClGxdtjepgrV">
+<li data-page-node-id="mbu1NjDZ5krAeCJ88328R1">❌ "The attention weight 0.7 indicates a strong medical correlation between glucose and HR" —— 越界,attention 不是相关;</li>
+<li data-page-node-id="KrezHmsNeCpSMK8Grez4Ar">❌ "The model discovers that HR causes glucose elevation" —— 严重越界;</li>
+<li data-page-node-id="TFGb63GShiFvaTEPFhmLiZ">✅ "The model learns to aggregate 70% of HR's information when constructing P1's glucose representation, suggesting learned feature interactions for this patient subgroup";</li>
+<li data-page-node-id="NGsOf2Wb4mPOcPeMWipJ5S">✅ 想加强论证:补充 attention 权重与 Pearson 相关的<b data-page-node-id="YPSUbaFL3JvolGTzhMA6w0">一致性分析</b>、临床医生盲评、消融实验(去掉高 attention 边,性能下降多少);</li>
+<li data-page-node-id="ThkQBRreSGRpGmGhASMn7O">✅ Attention 可视化应作为 <b data-page-node-id="SvC5EJWJaABdYKAMIt2KsE">case study / interpretability analysis</b>,而不是主要结论证据("Attention is not Explanation" — Jain &amp; Wallace 2019,值得引用并回应)。</li>
+</ul></div>
+<div class="meaning" data-page-node-id="7KqApYOypBJfISAuFjhKrZ"><b data-page-node-id="1v4EuhZQnu3CEvNWjYRPX3">但也不要因噎废食:</b>Attention 对<b data-page-node-id="Kr29I7TISJSrllGJdvXe0S">表征学习</b>的价值是实打实的 —— $H' = AV$ 让每个特征的表征融合了上下文,这正是 Transformer 在 EHR 上打败"逐特征独立编码"的原因。把它当作<b data-page-node-id="CbUiI9dtYplcQ7zPOCJybG">机制</b>陈述,不要当作<b data-page-node-id="YEaeyj4Qsw2rJHwrUCR5lh">医学发现</b>陈述。</div>
+</section>
+
+<!-- ================= 第 14 章 ================= -->
+<section class="chapter" id="ch8" data-page-node-id="joe7TkeaC8Dr5EciMHs4R0">
+<span class="ch-label" data-page-node-id="e1rSG5qE2tZOLesDMJY9HA">第 14 章</span>
+<h2 data-page-node-id="bB3vzanBLCleLsXtHZfm2C">Patient-specific 交互:你研究中最有价值的观察点</h2>
+
+<h3 data-page-node-id="AQ4kFr1WbaLhHPhvA97Lzh">8.1 不同患者,不同的 A 矩阵</h3>
+<p data-page-node-id="JPW0EJFjRqFPVQ7sAYxFwJ">当且仅当 $E_p$ 依赖患者 $p$ 的状态(12.2 的严格条件)时,$Q_p = E_p W^Q$、$K_p = E_p W^K$ 才随患者变化,注意力矩阵才真正个体化:$A_{P1} \neq A_{P2}$。以下数字全部来自 12.2 的完整推导,不是示意值。</p>
+<div class="calc" data-page-node-id="D70g4PJytsD7NA5nA9CSTw">
+<div class="calc-title" data-page-node-id="rM9nPsSggDfESKyy4cFhHS">对照:同一对特征,不同患者的聚合权重(接 12.2 的实算)</div>
+<div class="step" data-page-node-id="t8FYOmAjTB9rrCP1a3VFCY"><span class="lbl" data-page-node-id="hhBrFHp05p9Y9JXnTo3z1d">患者 P1(休克前期,x' = (2.0, 1.5, −1.0)):</span>$A^{P1}_{H,G} = 0.49$ —— 更新心率表征时,血糖 value 的聚合权重近一半;反向 $A^{P1}_{G,H} = 0.05$,极弱。<b>交互是有方向的</b>,两个方向可以悬殊</div>
+<div class="step" data-page-node-id="DyL3Vl31r19CsIWystBJ7Z"><span class="lbl" data-page-node-id="c1AsOGI17mlE91Ga2ZRZks">患者 P2(病情稳定,x' = (0.2, 0.0, 0.4)):</span>$A^{P2}_{H,G} = 0.23$,$A^{P2}_{G,H} = 0.17$ —— 双向都弱且接近对称,两特征基本各自表征</div>
+<div class="step" data-page-node-id="cKTH3y3Vpo88elFk54Ap4A"><span class="lbl" data-page-node-id="HuAPdXX5c2ecPwS1lZYhHt">可凝练的研究观察:</span>"feature interaction strength is <b data-page-node-id="O90AVIyngcPqC5mjhZrTty">patient-state-dependent</b>" —— 交互不是全局常量,而是随患者状态变化的函数。这比"全局特征重要性排名"更接近个体化医疗的叙事 ✓</div>
+</div>
+
+<h3 data-page-node-id="cYsk3pR2T8zAeihkDYsnHi">8.2 一个重要区分:Importance 与 Interaction 不矛盾</h3>
+<div class="okbox" data-page-node-id="djP87GgUxZu3iT2pxUz0ag">对同一患者可以同时成立:<b data-page-node-id="Tr5013bVmC8MD7PlSWDUUM">"血糖是最重要的变量"(feature importance 高)</b> 且 <b data-page-node-id="OYCwuChQU3RCsUJLBDA2S6">"血糖表征对心率 value 的聚合权重高"(interaction 高)</b>。前者讲"预测时看谁",后者讲"构建表征时给谁的 value 多大权重"。论文中应作为两个并行的分析维度呈现:一个 $F$ 维向量 + 一个 $F\times F$ 矩阵。</div>
+
+<div class="demo" data-page-node-id="2rNEJE2hnABQbdBoTPFGsR">
+<div class="demo-title" data-page-node-id="dIHqmYK8QDFa3lSncQ7pmY">交互演示:P1 vs P2 双患者注意力对比</div>
+<p style="font-size:13.5px;color:var(--ink2)" data-page-node-id="1t4w5icIt3iP18PU79JecP">左右分别是休克前期患者 P1 与稳定期患者 P2 的特征注意力矩阵(行=接收方,列=提供方)。拖动滑块模拟 P2 病情向 P1 状态演变,观察交互模式的迁移。</p>
+<div class="controls" data-page-node-id="lBF13bxjeuXZ3AmY4omSSf">
+  <label data-page-node-id="9zYcTcYH0IvVmbiMpXrStN">P2 病情严重度: <input type="range" id="duSev" min="0" max="100" value="15" data-page-node-id="MCYFb7tkft3OIHxFXukUFD"> <span id="duSevV" data-page-node-id="M2HD8boaf7ivyeQcnwQhtI">稳定</span></label>
+</div>
+<canvas id="duCanvas" width="600" height="270" data-page-node-id="XJ6EFipt6Jlcc5wLBZd5wl"></canvas>
+<div class="readout" id="duOut" data-page-node-id="0ybM7V5at06lspDCt3M8sj"></div>
+</div>
+
+<h3 data-page-node-id="Z5yuPCA5iIPEXcyLGoGvF7">14.3 从观察到研究问题的三步</h3>
+<ol data-page-node-id="fcFx6L2yYszFBmuyCnCalu">
+<li data-page-node-id="Ec8OORFwDfX2awuozu4uhv"><b data-page-node-id="RVCUNrRrtN4QQeNQPz0Fzy">聚类 A 矩阵:</b>收集全队列的 $\{A_p\}$,向量化后聚类 → 若簇与临床亚型吻合,说明模型学到了有医学意义的交互亚型;</li>
+<li data-page-node-id="tzOqCbEMNazxoVwVunsq7q"><b data-page-node-id="B6emF9ewCTTwBrTRcR5gF0">交互强度轨迹:</b>沿时间追踪 $A^{(t)}_{G,H}$,若它先于临床恶化事件升高 → 潜在早期预警指标(同样需要严格的预测性验证);</li>
+<li data-page-node-id="V5bz7FAqIrEVB5vw7bBBOv"><b data-page-node-id="B7eCBVyyu6EdcafX94CDhq">机制化约束:</b>让 $A$ 显式受患者表型条件化(如 $A = f(\text{phenotype}_p)$),把"个体化交互"从涌现行为变成可检验的模型假设。</li>
+</ol>
+</section>
+
+<!-- ================= 第 15 章(新增) ================= -->
+<section class="chapter" id="ch19">
+<span class="ch-label">第 15 章</span>
+<h2>多头注意力、位置/时间编码与 KV Cache</h2>
+
+<h3>15.1 多头:多组矩阵,各看一种交互模式</h3>
+<p>把 d 维嵌入切成 h 份,每份独立做第 12 章的计算,再拼接投影:</p>
+$$\mathrm{MultiHead}(X) = \mathrm{Concat}(head_1,\dots,head_h)\,W^O$$
+<div class="meaning"><b>医疗解读:</b>单个注意力矩阵 $A$ 是"平均化"的交互;多头允许模式分工 —— head 1 学会盯"血糖↔心率"代谢耦合,head 2 盯"血压↔心率"循环耦合,head 3 盯时间模式。这也是第 20 章避坑清单里"<b>不要平均所有头再解读</b>"的原因:平均会抵消分工(一头 +0.8 一头 −0.8,均值 ≈ 0,但两个头各自都有强模式)。论文应逐头可视化,并报告头间一致性。</div>
+
+<h3>15.2 位置编码与它的医疗变体</h3>
+<ul>
+<li><b>问题:</b>注意力对 token 顺序天然不敏感(矩阵乘对行排列等变),但病程里"谁先谁后"是核心信息;</li>
+<li><b>正弦编码:</b>$\mathrm{PE}(pos,2i)=\sin(pos/10000^{2i/d})$ —— 给每个时刻加一组多频率正弦指纹;</li>
+<li><b>RoPE:</b>用<b>旋转矩阵</b>(第 6 章已验算其保长性)按位置旋转 Q/K 向量,使点积 $q_m^\top k_n$ 只依赖相对距离 $m-n$;</li>
+<li><b>医疗版:</b>把"第几个小时"换成不规则的 $\Delta_t$(距上次测量的真实小时间隔)做 Time2Vec/正弦编码 —— 位置编码的思想 + 不规则采样的现实(第 16 章)。</li>
+</ul>
+
+<h3>15.3 KV Cache:ICU 实时监测的矩阵记忆</h3>
+<div class="meaning">流式推理(每来一条新测量就更新风险分)时,过去 T 个时刻的 K、V 不变 —— 缓存成 $K_{cache} \in \mathbb{R}^{T\times d}$、$V_{cache}$,新时刻只需为新 query 计算 $q_{new}K_{cache}^\top$(一行分数,约 $O(Td)$)与一行加权和。<b>不缓存时</b>,每一步都要对整个前缀重算 K/V 投影及注意力,单步成本随 T 增长,累计生成 T 步的注意力总量呈二次量级 —— 所以省的是<b>重复计算</b>,而不是把单步从 $O(T^2)$ 变 $O(T)$ 这么简单。<b>这是对注意力矩阵结构的纯工程利用</b>:理解"行=query、列=key"的不对称性,才能看懂为什么 K/V 可缓存而 Q 只来新的。</div>
+</section>
+
+<!-- ================= 第 16 章 ================= -->
+<section class="chapter" id="ch9" data-page-node-id="KoFSGPiiOaROQTtufZroRc">
+<span class="ch-label" data-page-node-id="CEGUH9lpJqpl7Jv5Zf373C">第 16 章</span>
+<h2 data-page-node-id="4cC2Eg1jRCrDGkkOgWJaFK">时序维度:时间注意力、不规则采样与 RNN 的矩阵视角</h2>
+
+<h3 data-page-node-id="xaYdecq73O2uYTJ4BmWKdL">16.1 两条注意力轴:时间 × 特征</h3>
+<p data-page-node-id="5Y8RF4edXHLVaAB4kSsnEx">患者矩阵 $X \in \mathbb{R}^{T\times F}$ 有两个轴,对应两种注意力,千万别混:</p>
+<table data-page-node-id="CKVhrQ5VwgjyFFh3RMphPu">
+<tr data-page-node-id="GPyfsXCsApfnENTgOGF1lV"><th data-page-node-id="LVHKad4GmbKZPndXVT5I4l"></th><th data-page-node-id="F2sSbwu9GGPZj3YSaMgtiG">时间注意力</th><th data-page-node-id="xVHWqBu54cRQPR1JHqMZkB">特征注意力</th></tr>
+<tr data-page-node-id="BSIOOzXlT2W5dBnHTzVLVG"><td data-page-node-id="NzudBi3RNqGU9YVpGcF943">token 是什么</td><td data-page-node-id="xcksO9GeqlME0uV6NBFXpx">每个时刻的状态向量</td><td data-page-node-id="qeqWgaw4aXZov8GfcqpGMT">每个特征的嵌入向量</td></tr>
+<tr data-page-node-id="R5ywqA4VQPdoLmMrOHRihu"><td data-page-node-id="eJbsDoBEJfGI9htpbUKLqU">矩阵形状</td><td data-page-node-id="BNHbEiKuQo7PyK80Kq356z">$T\times T$</td><td data-page-node-id="eu1ETRml8aByTbLwnet2TA">$F\times F$</td></tr>
+<tr data-page-node-id="nYTnm77iGLvWKzXIbCDaZb"><td data-page-node-id="j4cHIFlDnUnQChR1U5CY8X">回答的问题</td><td data-page-node-id="kAjHVRbai9RSJ2DLDwVMZ5">"每个 query 时刻对各 key 时刻的 value 分配多大聚合权重?"</td><td data-page-node-id="g2GPZObcNcuD63MmpE5ibt">"表征特征 i 时对特征 j 的 value 施加多大聚合权重?"</td></tr>
+<tr data-page-node-id="CZjvHDpFYkUkbKJxIypyzz"><td data-page-node-id="59j0zTKqTOcL5xwviqYxpi">代表工作</td><td data-page-node-id="R8UzfEI1tICyUNH06HvLFY">RETAIN(visit-level attention)、时序 Transformer</td><td data-page-node-id="GFEVSWLvrBHrPUJhUuBJFr">特征 token 化 Transformer(如 FT-Transformer 思想在 EHR 的应用)</td></tr>
+<tr data-page-node-id="jMVI0Y9ZIif9o6GCTCoJbj"><td data-page-node-id="k70ydAbjETFDv66CMDz6XT">轴向记忆法</td><td data-page-node-id="Xr2VUhVF6i2rmsjHGYnaaN">token 矩阵 T×d,左乘 T×T 的 A → 混合时刻</td><td data-page-node-id="q6GFgNASyEaaMPMpLA5fmI">token 矩阵 F×d,左乘 F×F 的 A → 混合特征(token×dim 布局下注意力恒为左乘)</td></tr>
+</table>
+
+<h3 data-page-node-id="aCPW7LFhLIAMdGQiCmpAiq">9.2 时间注意力数值演算</h3>
+<div class="calc" data-page-node-id="WLtPOMb0KLBSVoxriWSCXE">
+<div class="calc-title" data-page-node-id="m2Jm4yjj4ukyQzpUxCI96x">演算:attention pooling —— 当前 query 对各时刻 value 的聚合权重(注意:这是"池化读出"场景;完整 self-attention 中每个时刻都是 query,不存在唯一的"最重要时刻")</div>
+<div class="step" data-page-node-id="CwOQj5wwtlMcyYBelMKoG4"><span class="lbl" data-page-node-id="TNHXIgubAQbdBK2sMEX3mO">时刻表示(各 2 维):</span>$h_1=(1,0)$, $h_2=(0.5,0.5)$, $h_3=(0,1)$, $h_4=(1,1)$(当前)</div>
+<div class="step" data-page-node-id="D495HeEhh9wXkx9cuxlFcg"><span class="lbl" data-page-node-id="yVKRlfAh6hBGQDZ48r6S9B">以 $h_4$ 为 query 算分数</span> $s_t = h_4\cdot h_t/\sqrt{2}$:$s = (0.71, 0.71, 0.71, 1.41)$</div>
+<div class="step" data-page-node-id="aENB5PKTtQ7ywV8ARODvSN"><span class="lbl" data-page-node-id="AD9GDQ5JvgWEq1sPPMereg">softmax:</span>$\exp$ 后 $(2.03, 2.03, 2.03, 4.10)$,和 = 10.19<br data-page-node-id="Be0HskSrtjlNbF3TzV8ZVL">
+$\alpha = (0.20, 0.20, 0.20, 0.40)$ —— 当前时刻 value 的聚合权重 0.40,三个历史时刻各 0.20</div>
+<div class="step" data-page-node-id="hztQZJHqTi1VezG6sft27c"><span class="lbl" data-page-node-id="rX7pR9JzvJqv07h1f3BLKL">上下文向量:</span>$c = \sum_t\alpha_t h_t = 0.2(1,0)+0.2(0.5,0.5)+0.2(0,1)+0.4(1,1) = \mathbf{(0.7, 0.7)}$ ✓</div>
+</div>
+
+<h3 data-page-node-id="rhD1f81gez8l4mc2R3v8Fn">9.3 不规则采样:把时间间隔塞进矩阵</h3>
+<p data-page-node-id="H1JCKms4tKbRSYUb3wC5G0">医疗数据不按固定间隔采样(检查做完了才测)。两种线性代数化处理:</p>
+<ul data-page-node-id="7GcRzlkhpjMxHv8YVSPXhF">
+<li data-page-node-id="obsoFlpWLcfX5wYJfQvQMt"><b data-page-node-id="lqCupg7YvGLKpXV9N5TDLs">衰减调制:</b>把时间衰减因子乘进注意力分数 $\tilde s_t = s_t - \Delta_t/\tau$(等价于给权重乘 $e^{-\Delta_t/\tau}$)—— 第 7 章的对角矩阵思想嵌入 softmax 内部;</li>
+<li data-page-node-id="JL4C0PHtO3Z8AavBV1KiP6"><b data-page-node-id="oYh4nH0Id1VGsG0gQVzU0i">时间编码:</b>把 $\Delta_t$ 作为额外特征拼进嵌入,或用 Time2Vec / 正弦编码表示绝对时间 —— 位置编码的医疗版。</li>
+</ul>
+<div class="demo" data-page-node-id="mtR81EZba7VDc9Qv48HAPw">
+<div class="demo-title" data-page-node-id="H3KtLNuzktUic1ISCjNKDY">交互演示:时间衰减 vs 学到的注意力</div>
+<p style="font-size:13.5px;color:var(--ink2)" data-page-node-id="3OOZlEKXIjQm0yagCsjoJy">8 个历史时刻的测量。对比两条曲线:固定指数衰减(先验)与数据驱动注意力(学到)。调 τ 看先验假设多强时会"压垮"数据信号。</p>
+<div class="controls" data-page-node-id="7oivZDp8eonE65FBnWUvqH">
+  <label data-page-node-id="5BWcH4rdwYMFgF9Q6o9AXZ">衰减时间常数 τ(小时): <input type="range" id="tmTau" min="4" max="96" value="24" data-page-node-id="1x44dnW2ShXLSJLhaZOcIS"> <span id="tmTauV" data-page-node-id="xsKAyxUXgkWI5fVJ5NHZtl">24h</span></label>
+</div>
+<canvas id="tmCanvas" width="560" height="260" data-page-node-id="khXH3FKv06324fLh0nv2E4"></canvas>
+<div class="readout" id="tmOut" data-page-node-id="RMMC3nEhxHbNk6gx8jg0dm"></div>
+</div>
+
+<h3 data-page-node-id="gXLA7YoVogCnFm5q8jjLAI">16.4 RNN:同一个矩阵连乘 T 次</h3>
+<p data-page-node-id="dFAWjD9ZBHLIFUpPKEjFJN">RNN 的隐状态 $h_t = \tanh(Wh_{t-1} + Ux_t)$(记 $z_t = Wh_{t-1} + Ux_t$)。对相隔 $t$ 步的两个隐状态,由链式法则(第 17 章):$$\frac{\partial h_T}{\partial h_t} = \prod_{k=t+1}^{T} \frac{\partial h_k}{\partial h_{k-1}} = \prod_{k=t+1}^{T} D_k\, W,\qquad D_k = \operatorname{diag}\big(1-\tanh^2(z_k)\big)$$注意:这里出现的是 <b>矩阵连乘(矩阵幂 $W^{\,t}$,指数 $t$ = 时间步数),不是转置 $W^\top$</b> —— 记号上极易混淆,含义完全不同。诊断性分析中,若各 $D_k$ 的缩放接近 1 且 $W$ 可对角化 $W = Q\Lambda Q^{-1}$,则连乘的主项 $\sim Q\Lambda^{\,t}Q^{-1}$,衰减/放大速率由主特征值 $\lambda_1$ 主导:</p>
+<div class="calc" data-page-node-id="n3aknXNCiVWYjYt6wf61jr">
+<div class="calc-title" data-page-node-id="KHPhQcsUEixOSR4VDvVTaJ">演算:梯度消失/爆炸的定量演示(主特征值近似)</div>
+<div class="step" data-page-node-id="ZLZxURDagv9kCSJnXPdmyP">若主特征值 $\lambda_1 = 0.9$:48 小时后梯度贡献 $\sim 0.9^{48} \approx 0.006$ —— 入院时的危急值对预测几乎零影响(梯度消失)。再乘上 $D_k$ 的 tanh 导数($\le 1$,饱和区趋近 0),实际衰减只会更快</div>
+<div class="step" data-page-node-id="Abzf4zjSzyV8eHaDRYK2T8">若 $\lambda_1 = 1.05$:$1.05^{48} \approx 10.4$ —— 每步放大,几十步后溢出(梯度爆炸)</div>
+<div class="step" data-page-node-id="7nBCOh3Djs8uhzSGZg3dDV"><span class="lbl" data-page-node-id="JybE4bs7IRpF4OAJsqZjn9">医疗含义:</span>ICU 里 48 小时前的异常恰恰可能是病因线索。LSTM/GRU 用门控(逐元素乘 sigmoid 门,梯度路径上出现的是接近恒等的对角阵而非 $W$ 的连乘)缓解这一问题;RETAIN/Transformer 用注意力让任意时刻直接相互作用 —— 本质是<b data-page-node-id="KHvL0zS6oFgQeeDKAWU8BB">把梯度的计算依赖路径从 $O(T)$ 步缩短到 $O(1)$ 步</b>($h'_t$ 一步之内直接依赖所有 $v_j$,不再经过 $T$ 次 Jacobian 连乘),长程梯度信号因此不再被指数级衰减 ✓</div>
+</div>
+</section>
+
+<!-- ================= 第 17 章(新增) ================= -->
+<section class="chapter" id="ch20">
+<span class="ch-label">第 17 章</span>
+<h2>梯度、Jacobian、Hessian 与反向传播:模型如何"学"</h2>
+
+<h3>17.1 梯度:风险曲面上升最快的方向</h3>
+<p>对标量损失 $L(\mathbf{w})$,$\nabla L = (\partial L/\partial w_1, \dots)^\top$ 是向量:方向 = 上升最快,模长 = 速率。训练 = 反着它走:$w \leftarrow w - \eta\nabla L$。</p>
+<div class="calc">
+<div class="calc-title">演算:二次碗上的一步下降</div>
+<div class="step">$L(w_1,w_2) = w_1^2 + 3w_2^2$,$\nabla L = (2w_1, 6w_2)$。在 (1,1):$\nabla L = (2,6)$ —— $w_2$ 方向陡 3 倍(碗在该方向更窄)</div>
+<div class="step">η=0.1 一步:$(1,1) \leftarrow (1,1) - 0.1(2,6) = (0.8, 0.4)$,L 从 4 降到 $0.64+0.48 = 1.12$ ✓</div>
+</div>
+
+<h3>17.2 Jacobian 与 Hessian:一阶导与曲率</h3>
+<table>
+<tr><th>对象</th><th>形状</th><th>患者建模中的作用</th></tr>
+<tr><td>梯度 ∇L</td><td>向量</td><td>SGD/Adam 的更新方向</td></tr>
+<tr><td>Jacobian $J_{ij}=\partial f_i/\partial x_j$</td><td>矩阵</td><td>每层的局部导数;反向传播 = 向量-Jacobian 积(VJP)沿计算图连乘</td></tr>
+<tr><td>Hessian $H_{ij}=\partial^2 L/\partial w_i\partial w_j$</td><td>对称矩阵(要求 $L$ 二阶连续可微,$C^2$ 条件下才有 $H_{ij}=H_{ji}$)</td><td>曲率:在<b>驻点</b>($\nabla L=0$)处,正定 ⇒ 严格局部极小;特征值有负有正 ⇒ <b>鞍点</b>;半定($\lambda_{\min}=0$)⇒ 二阶检验失效;条件数大 = 又窄又深的峡谷,梯度下降震荡(见下方演示)</td></tr>
+</table>
+<div class="warnbox"><b>两个常见误用的反例:</b>① $L(x)=x^3$ 在 $x=0$ 处 $L''=0$(半定)但不是极值点 —— "特征值非负"不构成极小的充分条件;② 反过来,非驻点处 Hessian 正定什么也说明不了(此时下降方向仍由 $\nabla L$ 决定)。因此正确表述是:<b>驻点 + 正定 ⇒ 严格局部极小</b>,其它情况单独讨论。</div>
+<div class="meaning"><b>鞍点直觉:</b>一个常被引用的启发式说法是"高维损失面上鞍点远多于局部极小"——直觉是:要让驻点成为极小,需要 Hessian 的全部 $n$ 个特征值同时为正;维度越高,"全体为正"越难满足,随机景观理论(Dauphin et al., 2014 等对高斯随机场的 Kac-Rice 分析)确实给出指数级悬殊的计数。但注意这是<b>对理想化随机损失面的渐近结果,不是对具体网络的定理</b>,更不存在"概率恰为 $1/2^n$"这样的精确结论。实践要点:动量(momentum)靠惯性冲出鞍部平台;二阶方法太贵,一阶 + 噪声通常足够逃逸。医疗小模型(逻辑回归 + 交叉熵)的损失对线性 score 是凸的碗面 —— 严格说:共线特征或数据完全可分时是<b>非严格凸</b>(Hessian 半正定,解不唯一或不可达有限值),但不存在坏的局部极小 —— 这也是为什么逻辑回归至今是临床基线:优化上它"没有惊喜"。</div>
+
+<h3>17.3 链式法则 = 反向传播的全部内容</h3>
+$$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial z}\cdot\frac{\partial z}{\partial y}\cdot\frac{\partial y}{\partial x}$$
+<div class="calc">
+<div class="calc-title">演算:最小网络的一次前向 + 反向(2 输入 → 2 隐藏 ReLU → sigmoid 输出恶化风险)</div>
+<div class="step"><span class="lbl">参数:</span>$W^{[1]} = \begin{pmatrix}0.5&0.3\\-0.2&0.8\end{pmatrix}$, b⁽¹⁾=(0.1, 0.1);$W^{[2]} = (0.6, -0.4)$;输入 x=(1.0, 0.5)(标准化血糖、心率),标签 y=1(72h 内恶化)</div>
+<div class="step"><span class="lbl">前向①:</span>$z^{[1]} = W^{[1]}x + b^{[1]}$:$z_1 = 0.5+0.15+0.1 = 0.75$;$z_2 = -0.2+0.4+0.1 = 0.30$;ReLU → $a^{[1]} = (0.75, 0.30)$</div>
+<div class="step"><span class="lbl">前向②:</span>$z^{[2]} = 0.6\times0.75 - 0.4\times0.30 = 0.33$;$\hat y = \sigma(0.33) = 0.5817$;交叉熵 $L = -\ln 0.5817 = 0.5418$</div>
+<div class="step"><span class="lbl">反向①(sigmoid+交叉熵的极简梯度):</span>$\partial L/\partial z^{[2]} = \hat y - y = -0.4183$</div>
+<div class="step"><span class="lbl">反向②(梯度 = 误差 × 输入的外积):</span>$\partial L/\partial W^{[2]} = -0.4183\times(0.75, 0.30) = (-0.3137, -0.1255)$</div>
+<div class="step"><span class="lbl">反向③(误差回传 = 乘转置矩阵!):</span>$\delta^{[1]} = W^{[2]\top}\times(-0.4183)\odot\mathrm{ReLU}' = \begin{pmatrix}0.6\\-0.4\end{pmatrix}(-0.4183) = (-0.2510, 0.1673)$</div>
+<div class="step"><span class="lbl">反向④:</span>$\partial L/\partial W^{[1]} = \delta^{[1]}x^\top = \begin{pmatrix}-0.2510&-0.1255\\0.1673&0.0837\end{pmatrix}$;η=0.1 更新:$W^{[1]}_{11} \leftarrow 0.5+0.0251 = 0.5251$ …… 训练 = 把以上重复几万次 ✓</div>
+<div class="step"><span class="lbl">刻进肌肉记忆的两句话:</span><b>误差回传乘 W 的转置;权重梯度用 δ 与该层输入的外积。</b></div>
+</div>
+
+<div class="demo">
+<div class="demo-title">交互演示:学习率与"之字形"震荡</div>
+<p style="font-size:13.5px;color:var(--ink2)">损失面 $L = 0.5w_1^2 + 4w_2^2$(Hessian 特征值 1 和 8,条件数 8 的窄谷)。学习率太大 → 在峡谷两壁间来回弹甚至发散 —— 正是训练时 loss 突然 NaN 的微观机制。</p>
+<div class="controls">
+  <label>学习率 η: <input type="range" id="gdLr2" min="1" max="300" value="120"> <span id="gdLrV2">0.120</span></label>
+  <button id="gdRun2">运行</button>
+  <button class="ghost" id="gdReset2">重置</button>
+  <span style="font-size:12.5px;color:var(--ink3)">提示:η 超过 0.25 发散,试试!</span>
+</div>
+<canvas id="gdCanvas2" width="460" height="360"></canvas>
+<div class="readout" id="gdOut2"></div>
+</div>
+</section>
+
+<!-- ================= 第 18 章 ================= -->
+<section class="chapter" id="ch10" data-page-node-id="CDOdFdn9926HbMp8Lk64Ca">
+<span class="ch-label" data-page-node-id="Jzd5QZvB2CzyU8HjesABSe">第 18 章</span>
+<h2 data-page-node-id="31j2mp2c6MzNicGFGc2n0Z">从表征到预测:一次完整的患者前向演算</h2>
+<p data-page-node-id="ZWuzeFZSn2YjEjvr0dp1n1">把所有零件装起来:输入轨迹 → 标准化 → 嵌入 → 特征注意力 → 时间池化 → 疾病预测。每一步都是前几章的矩阵操作。</p>
+
+<div class="calc" data-page-node-id="8cq9KBSNmKJRMc3pFcFEA6">
+<div class="calc-title" data-page-node-id="CAx4qYDbxfdCM2W1VCFAwh">全链路演算(数字接第 12、16 章)</div>
+<div class="step" data-page-node-id="x4Md38GeIJ9Z1KSDcdKNUw"><span class="lbl" data-page-node-id="KOfW1iAoKv1VRJE4jJSM28">① 标准化(第 7 章):</span>原始 (250,120,90) → (2.17, 1.75, −1.00)</div>
+<div class="step" data-page-node-id="9x7i8sMI27eS7Y2gaArmvE"><span class="lbl" data-page-node-id="irfIsP0nxbtb248GpMmDmF">② 特征嵌入:</span>投影到嵌入空间,得 E(第 12 章的起点)</div>
+<div class="step" data-page-node-id="YnUxX69GXz70pp5XDLyQL4"><span class="lbl" data-page-node-id="YGQscE7WAj7k30vLq1KNXG">③ 特征注意力(第 12 章):</span>$H' = AV$,每个特征的表征融入上下文,如 $h'_B = (0.86, 1.44)$</div>
+<div class="step" data-page-node-id="gQ0PAW32b0LMk21MoHBadR"><span class="lbl" data-page-node-id="dz3POd8kXqLzSq1SZ5SFRK">④ 时间注意力池化(第 16 章):</span>$\alpha = (0.20, 0.20, 0.20, 0.40)$,$c = \sum_t\alpha_t h'_t = (0.7, 0.7)$ —— 这就是患者表征 $h_p$ 的 2 维玩具版</div>
+<div class="step" data-page-node-id="XIWBhnCVa6WO7LOaGVb9DB"><span class="lbl" data-page-node-id="yCH53s9CQDGHDIuavHO5ha">⑤ 预测头(logistic):</span>$w = (1.5, 1.0)$, b = −2<br data-page-node-id="6gWoEKJPhZfDIMc5421WUc">
+$z = w\cdot h_p + b = 1.5\times0.7 + 1.0\times0.7 - 2 = 1.75 - 2 = -0.25$<br data-page-node-id="J0cLHVxT0m3YhTxrGJYBDF">
+$\hat y = \sigma(-0.25) = 0.438$ → 该患者 30 天再入院风险 43.8%</div>
+<div class="step" data-page-node-id="zVAKGVaBg3v0jvuRNCCvut"><span class="lbl" data-page-node-id="Wwur1hu6yAY1xjAWX3SbHl">⑥ 训练(反向传播):</span>标签 y=1,交叉熵 $L = -\ln 0.438 = 0.826$;$\partial L/\partial z = \hat y - y = -0.562$,误差沿 ⑤→④→③→② 逐层乘 Jacobian(转置矩阵)回流,更新全部 W —— 与通用深度学习完全同构 ✓</div>
+</div>
+
+<div class="meaning" data-page-node-id="AlqhO3msph8f2P8jAa2oId"><b data-page-node-id="OyxsV0UpVao1E14SiMemmG">复盘:每个线性代数概念落在哪一步</b> —— 向量(状态)→ 对角矩阵(标准化/衰减)→ 投影矩阵(嵌入)→ 注意力矩阵(特征交互)→ 加权线性组合(池化)→ 点积+sigmoid(预测)→ 链式法则/Jacobian(训练)。一份患者数据从头到尾,没有离开过线性代数。</div>
+</section>
+
+<!-- ================= 第 19 章(新增) ================= -->
+<section class="chapter" id="ch21">
+<span class="ch-label">第 19 章</span>
+<h2>数值稳定性:从公式到代码的"最后一公里"</h2>
+<p>数学上等价的式子,浮点世界里可能一个能跑、一个爆炸。医疗模型三个高发地雷:</p>
+
+<h3>19.1 softmax 减最大值:注意力矩阵不溢出的前提</h3>
+<div class="calc">
+<div class="calc-title">演算:溢出 vs 稳定</div>
+<div class="step"><span class="lbl">某患者特征分数 z = (1000, 1001, 1002)(极端 logits):</span>直接 $e^{1000} \approx 10^{434}$ → float64 溢出 inf,inf/inf = <b>NaN</b>,注意力矩阵整行报废 💥</div>
+<div class="step"><span class="lbl">稳定版:</span>先减行最大值:$z - 1002 = (-2, -1, 0)$,exp → (0.135, 0.368, 1.0),和 1.503<br>
+softmax = (0.090, 0.245, 0.665) —— 与原式<b>数学恒等</b>(分子分母同乘 $e^{-c}$),但永不溢出 ✓ 第 12 章的每行 softmax 都默认做了这一步。</div>
+</div>
+
+<h3>19.2 条件数:共线特征的误差放大器</h3>
+<p>$\kappa(A) = \sigma_{max}/\sigma_{min}$。κ 大 ⇒ 输入的微小误差被放大 κ 倍进解里。</p>
+<div class="meaning"><b>医疗高发场景:</b>①检验指标高度共线(第 8 章肌酐/eGFR 例)→ 正规方程 $(X^\top X)\beta = X^\top y$ 的 κ 被<b>平方</b>放大 —— 所以永远用 QR/SVD 求解,或岭回归加 $\lambda I$;②未标准化特征(血糖上百 vs 体温三十几)→ 损失面 Hessian 条件数巨大 → 第 17 章演示里的"之字形"震荡。标准化、LayerNorm 的本质都是<b>缩小等效条件数</b>。</div>
+
+<h3>19.3 log 域计算:轨迹概率不“下溢”的前提</h3>
+<div class="calc">
+<div class="calc-title">演算:连乘概率下溢</div>
+<div class="step">患者 100 个时刻的联合似然 $= \prod_t p_t$,即使 $p_t = 0.9$:$0.9^{100} \approx 2.7\times10^{-5}$,再乘几百个就到 $10^{-300}$ 以下 → float64 下溢为 0,loss = −ln 0 = inf 💥</div>
+<div class="step"><span class="lbl">解:</span>$\ln L = \sum_t \ln p_t$ —— 乘变加,永远在 log 域相加,最后需要时才 exp 回来。交叉熵、负对数似然、beam search 全部 log 化 ✓</div>
+</div>
+<div class="warnbox"><b>调试口诀:</b>loss 变 NaN 时按序排查 —— ①学习率(第 17 章发散)→ ②softmax/exp 溢出(19.1)→ ③log(0) 或除 0(19.3,掩码位是否参与平均)→ ④梯度爆炸(第 4 章裁剪)。医疗数据多一条:⑤检查极端误录值(血糖 9999)是否进了一个 batch。</div>
+</section>
+
+<!-- ================= 第 20 章 ================= -->
+<section class="chapter" id="ch11" data-page-node-id="QRkYuEgd1APRCoG7IMbAsd">
+<span class="ch-label" data-page-node-id="teIoFJt476p2iVwopmADes">第 20 章</span>
+<h2 data-page-node-id="D4hnrG8hghINJ77ICuHlTw">低秩微调医疗大模型 + 论文避坑清单</h2>
+
+<h3 data-page-node-id="xnYSPK3aELnMitcezpWgFX">20.1 LoRA:用低秩参数化适配医疗领域</h3>
+<p data-page-node-id="Fe2P7H78zx2GWTUDjOWKv3">通用大模型权重 $W_0$ 冻结,只学 $\Delta W = BA$(其中 $B\in\mathbb{R}^{d\times r}, A\in\mathbb{R}^{r\times d}$,秩 $r\ll d$)。注意措辞:这是把更新<b>显式参数化</b>为低秩形式($\mathrm{rank}(\Delta W)\le r$ 由构造保证),是一个<b>结构假设 / 归纳偏置</b>,而不是"证明了最优更新必然是低秩的"——后者只在部分理论结果和实验观察中有支持。医疗场景的特殊动机:</p>
+<ul data-page-node-id="EVXJYNnGo8OvxW6w7OM27K">
+<li data-page-node-id="QVtTFYJNWYQLeHGwyqUywr"><b data-page-node-id="Un9ZWDzPbZBouNRou8Hs0i">患者隐私:</b>可训练参数大幅缩减(典型为全量的千分之几到百分之几,取决于秩 $r$、目标模块数量与底座规模——下方示例是 3.1%;常见的"0.1%–1%"说法对应更大的底座或更小的 $r$,不是普适数字),可在院内单机微调,原始数据不出院;</li>
+<li data-page-node-id="gkJw7IZlT69wCCKFMxeNzU"><b data-page-node-id="Sj3dlnlQR1HVSh0yEG4hsD">小数据:</b>罕见病队列可能只有几百例,全量微调必过拟合,低秩约束是天然的归纳偏置;</li>
+<li data-page-node-id="GdWvrJbHHMzO2hgNtJvOUp"><b data-page-node-id="0wt7FPwUJE0MAd6yK8s83W">多中心:</b>每个医院一个 LoRA 适配器,共享底座 —— 联邦学习的轻量化版本。</li>
+</ul>
+<div class="calc" data-page-node-id="eKAcaRNNN37Oyaj9jeAPXc">
+<div class="calc-title" data-page-node-id="c4qQXTgD4L80xgWTCo0Jv2">演算:EHR  Transformer 一层(d=512)的 LoRA 参数量</div>
+<div class="step" data-page-node-id="YPSU9Q7ys2PJN8Z1V4JJvk">全量:$512\times512 = 262{,}144$;LoRA(r=8):$512\times8 + 8\times512 = 8{,}192$ —— <b data-page-node-id="9lJ6SmAulqCNHILQJBp6uW">3.1%</b> ✓</div>
+<div class="step" data-page-node-id="FzYZM2uctyisPlMnfKS7L6">直觉:领域适配所需的"新方向"少(医学概念大多已在通用语料中学过,只需校准到 EHR 的表达习惯),低秩假设在医疗域特别合理。</div>
+</div>
+
+<h3 data-page-node-id="jYx2tVVZUJHvJQc2MLT9Cq">20.2 论文避坑清单(可直接当审稿自查表)</h3>
+<table data-page-node-id="3SPBwwIpSFkTMEUuwAG9hG">
+<tr data-page-node-id="GloUpcGbsgRKO3tsWxogco"><th data-page-node-id="v4E4IyQcK0AwqqFnAYl0VK">陷阱</th><th data-page-node-id="DlQuT0FU5qz3kL1iylWkHM">错误表述</th><th data-page-node-id="Oa07o9QS8oFrncVfLWOBKt">正确做法</th></tr>
+<tr data-page-node-id="N7lYzknNtHyspL7cFf0Ek8"><td data-page-node-id="0oVgWPhKIUmFmdkSB5Fl0N">Attention 当相关</td><td data-page-node-id="clXmJw4bkp0gzAjgPM0EVf">"attention 显示 glucose 与 HR 相关"</td><td data-page-node-id="acnQrptdQAmldc6tJY8smf">改用 "learned information aggregation";补充 Pearson/ Spearman 对照实验</td></tr>
+<tr data-page-node-id="BjEutnMy9HePFh1GdlR2AH"><td data-page-node-id="lJFMDbEMWfAbp44JvoCUG8">Attention 当因果</td><td data-page-node-id="ArREe2HmMnvWLkh0bf4rWT">"HR drives glucose"</td><td data-page-node-id="gsm619xTx5ESVLqcojuBO4">因果结论需要干预设计;观察性数据最多说 "consistent with"</td></tr>
+<tr data-page-node-id="kM8gBixfgCGLsTWK35w5r1"><td data-page-node-id="6C5EKDsOMD8yRXeZ0GhKEJ">行/列读反</td><td data-page-node-id="FVOd9PYHHQ7Gv6JRJ7Hs2r">"第 i 列是特征 i 的重要性"</td><td data-page-node-id="K11Tme7BuTpGLIlXAu0FLH">行=接收方、列=提供方;列和 ≠ 重要性</td></tr>
+<tr data-page-node-id="RqHzuEKrY3FNDpFvbcDtEi"><td data-page-node-id="l7G6D76ehM6qOhfr6ExHsj">注意力头平均</td><td data-page-node-id="S0J8BIO8am7Z5ZDElEX1KW">直接平均所有头后解读</td><td data-page-node-id="UBnI2XJHkKmYv8gcqrHIIl">逐头分析;头的均值可能互相抵消(一头 +0.8 一头 −0.8)</td></tr>
+<tr data-page-node-id="fEFOeSfP4XCZJ0tLIbp6D6"><td data-page-node-id="GSE2sDD3h0abgR9VVb510n">未做稳定性检验</td><td data-page-node-id="Ouadqm0wq8tCkUXHGmNfyf">单次训练一张热力图下结论</td><td data-page-node-id="VRTLmNXRfGhOXkuHrqjhd0">多种子/多折重复,报告 A 矩阵的方差;不稳定的热图不应进论文</td></tr>
+<tr data-page-node-id="6LXeCWFAJN8nKCbOVFhdzI"><td data-page-node-id="76enkexVTAG32xACh9qKtB">时间/特征轴混淆</td><td data-page-node-id="H7FADFiJxOHP9FBm6GoCAJ">把 T×T 矩阵当特征交互讲</td><td data-page-node-id="aqdgspFZq4qSuAshrHpMWL">明确声明 attention 轴;两轴分开可视化</td></tr>
+<tr data-page-node-id="pB8UvFR53X629dDWSbhm95"><td data-page-node-id="S6x26yn1yM5jHGz3snnlDW">缺失值静默处理</td><td data-page-node-id="tFPBIfB8J8tYMnI7v8Eq3L">不报告插补方法</td><td data-page-node-id="PJYtngBJMShCbMOngrBjaL">报告掩码处理与插补策略;做缺失率敏感性分析</td></tr>
+<tr data-page-node-id="GxbXe0Ar2BTzqu2BYO32YX"><td data-page-node-id="U1a1r7h6Oefja9Zkzn2EvN">量纲未统一</td><td data-page-node-id="404LyHZuucYZg1HaxvFZty">多中心数据直接拼接</td><td data-page-node-id="R4D4J46D6CnZLoZ83AmWLU">统一单位后标准化;在附录给 μ、σ 表</td></tr>
+</table>
+</section>
+
+<!-- ================= 第 21 章 ================= -->
+<section class="chapter" id="ch12" data-page-node-id="pv8p4otbxPDcPwHGMXPZfL">
+<span class="ch-label" data-page-node-id="SJnsEK5GL2qGdzrLg8YjOd">第 21 章</span>
+<h2 data-page-node-id="W1O38HrV2PAY5S0aQCSzSr">速查表:患者表征学习 × 线性代数</h2>
+<table data-page-node-id="TgNlaSBR7oeCZxOo5RqGcU">
+<tr data-page-node-id="94Nf1eRm6vhLtUhYBmEZ60"><th data-page-node-id="zIKi8DPrYOIkHb8auPzlTV">线性代数对象</th><th data-page-node-id="TBOfSNeXaMua62LDVk3TNr">在患者表征学习中是…</th><th data-page-node-id="aAiOPP3NMI2C0zJfwtyrsy">核心公式</th></tr>
+<tr data-page-node-id="7iTQbFpMedoyq1KmrkkUBY"><td data-page-node-id="tiLOJC6p8xd9IxxsRxHWgm">向量</td><td data-page-node-id="YTgw97BHuMoWC5NFlbfP3D">某时刻的患者状态</td><td data-page-node-id="s7HvHLwCrQ0uaHAbniR6PC">$x_t \in \mathbb{R}^F$</td></tr>
+<tr data-page-node-id="GzDHmAoQcNMszcRH2T6ECW"><td data-page-node-id="PmoGmX8uEib6L41lLselm5">矩阵</td><td data-page-node-id="GQdk0BjYuytWWTdukE08xx">一位患者的完整病程</td><td data-page-node-id="X5s4ebIMYwO3ksYUBc2BqN">$X_p \in \mathbb{R}^{T\times F}$</td></tr>
+<tr data-page-node-id="yo04o7zvwXAfuOEwwzGDfw"><td data-page-node-id="1gCKve1mNrPuoQWy22UGsg">张量</td><td data-page-node-id="zzFlunmATcfeDKTYbTcat6">整个患者队列</td><td data-page-node-id="5W6lQg2PocEnzB3IeeBpqx">$\mathcal{X} \in \mathbb{R}^{N\times T\times F}$</td></tr>
+<tr data-page-node-id="pJN8ll7XlolM4BJSJHTauF"><td data-page-node-id="lLcMXWaDTC8F2rcoFbAGW0">点积/余弦</td><td data-page-node-id="j30UQJeMCYLBms2M3VTmCe">相似患者检索、病例匹配</td><td data-page-node-id="aHLg1J4G3f9Q2ab011E094">$\cos(x_a,x_b)$</td></tr>
+<tr data-page-node-id="ho6fzs3BXypoSbQ34gYhHG"><td data-page-node-id="vpTf6U8EjQuQ2EAEGMOdwH">对角矩阵(右乘)</td><td data-page-node-id="sqeuKoh5gAVZn1wE1uOrbE">特征标准化(z-score)</td><td data-page-node-id="MaVWnH9UT08smw7xw9wUzA">$(X-\mathbf{1}\mu^\top)D^{-1}$</td></tr>
+<tr data-page-node-id="igQE93BtCPjDJHQQHugthQ"><td data-page-node-id="xpD0eF6Q3kztSy8yFV0CKB">对角矩阵(左乘)</td><td data-page-node-id="rn0opiauV9ZGWOzlA73hiP">时间衰减加权</td><td data-page-node-id="K0StR11Wv2h9y40k5ZFUwV">$\Gamma X$</td></tr>
+<tr data-page-node-id="Qkj342Opzz4KpOBS6OAcul"><td data-page-node-id="6vDTHHMRb8TDEsSIEMo2fj">Hadamard 积</td><td data-page-node-id="qgwi9SpJSCfXqlxXzyQ0Ld">缺失值掩码</td><td data-page-node-id="Zf4WahYDnuOpvUZ68fCVJe">$x \odot m$</td></tr>
+<tr><td>线性组合</td><td>临床评分卡、logistic 回归的本质</td><td>$w^\top x$</td></tr>
+<tr><td>Lp 范数</td><td>L1 稀疏选指标 / L2 平滑 / L∞ 最坏扰动</td><td>$\|x\|_p=(\sum_i|x_i|^p)^{1/p}$</td></tr>
+<tr><td>矩阵乘法</td><td>队列批量评分、线性层</td><td>$(XW)_{ij}$ = 行·列</td></tr>
+<tr><td>正交矩阵</td><td>正交初始化、RoPE 时间编码</td><td>$Q^\top Q = I$</td></tr>
+<tr><td>秩 / 行列式</td><td>特征冗余诊断(肌酐↔eGFR)</td><td>$\det A = 0 \iff$ 信息塌缩</td></tr>
+<tr><td>逆矩阵 / 正规方程</td><td>线性回归解析解;岭回归 = L2 正则真身</td><td>$\hat\beta=(X^\top X+\lambda I)^{-1}X^\top y$</td></tr>
+<tr data-page-node-id="KOhRvMGtqut3Ft53SVMyH8"><td data-page-node-id="NQcE9DfUA8YWNw3uhkHube">Gram/协方差矩阵</td><td data-page-node-id="0AqczW4gxA7UAKWyD8v2vH">队列特征相关结构(统计层面)</td><td data-page-node-id="jVkrrtW4Eu7LYurFBiw98Q">$\Sigma = \frac{1}{N}X^\top X$</td></tr>
+<tr data-page-node-id="dYx6ATRGDgOfD3ZSpZrqJl"><td data-page-node-id="jIBWStw57JZtzZyEd9JFMF">特征分解</td><td data-page-node-id="aGwzWzllPoLYAdEWDghlOD">PCA:患者差异主轴(候选严重度轴,需验证)</td><td data-page-node-id="7x3JXINJBAOuMBKfCfD8ta">$\Sigma = Q\Lambda Q^\top$</td></tr>
+<tr><td>SVD</td><td>患者原型、Med2Vec 代码嵌入、LoRA 根基</td><td>$A = U\Sigma V^\top$</td></tr>
+<tr><td>Hessian</td><td>曲率、鞍点、学习率"之字形"震荡</td><td>$H_{ij}=\partial^2 L/\partial w_i\partial w_j$</td></tr>
+<tr data-page-node-id="lxo1UkYcycEH5Z5fKAbSuw"><td data-page-node-id="IFwKSMwCIIwnepOtsoim3D">注意力矩阵 F×F</td><td data-page-node-id="r2v5TK9c5O3DUbC4Fb1n1D">特征间信息聚合(机制层面,个体化)</td><td data-page-node-id="sy1uMPbNglRGcEMT7GfFoV">$A=\mathrm{softmax}(QK^\top/\sqrt d)$</td></tr>
+<tr data-page-node-id="KzlujWFT7Q6vtSXhmQepra"><td data-page-node-id="CzOm4hJVvATZFERXpEu9Gj">注意力矩阵 T×T</td><td data-page-node-id="toaoIrMWDJKB4adudILdIu">关键时刻回顾(RETAIN 等)</td><td data-page-node-id="hhX2QSjfFADR2mqMxEG4mx">$c=\sum_t\alpha_t h_t$</td></tr>
+<tr data-page-node-id="PjWlhY27y9IJj3vXUrcmHL"><td data-page-node-id="xdt0nokXoza8FbPhfkQ3oi">矩阵连乘 $W^T$</td><td data-page-node-id="DzkrBOiBliFHyxL2XnTDgh">RNN 梯度消失/爆炸根源</td><td data-page-node-id="k0rxJlxPolBs6MOAP1vptB">$W^T = Q\Lambda^T Q^\top$</td></tr>
+<tr data-page-node-id="nXOKeUmuPiWDnOJJv1CPM4"><td data-page-node-id="XrPMVGK4jbdFu3R7ahd9bt">低秩分解</td><td data-page-node-id="FED3bFZZB2yLOqkLMdK8AY">LoRA 院内微调、隐私保护</td><td data-page-node-id="qp5MeRym4XZ11L73WVd4Ji">$\Delta W = BA$</td></tr>
+<tr data-page-node-id="pHxkYMayXXBPlWjD7ddccB"><td data-page-node-id="PHH4RXiPqyhlCj7txdq5cl">Jacobian 连乘</td><td data-page-node-id="jTK9SefRetKyqhsYMFyQZi">端到端训练的全部内容</td><td data-page-node-id="NRjmwb3EzOn1BK1F7Orrp4">链式法则反向传播</td></tr>
+<tr><td>数值稳定三件套</td><td>softmax 减最大值、条件数、log 域似然</td><td>$\mathrm{softmax}(z)=\mathrm{softmax}(z-c)$</td></tr>
+</table>
+
+<div class="keybox" style="text-align:center;font-size:15.5px" data-page-node-id="qZFNOSPkYDA28KBLFI4SBF">
+<b data-page-node-id="EZTF4O48xB89jDJpepVSq0">四概念一句话终审:</b><br data-page-node-id="FguDXrcLGICGuV0wFJL2BL">
+Weight = "重不重要" · Attention = "参考谁多少" · Correlation = "是否一起变" · Causality = "干预会怎样"<br data-page-node-id="jvi8qQY0zzkl0GEUnjIOYq">
+<span style="font-size:13.5px" data-page-node-id="VFaFCqYOvXBkXpqNTEPCP5">前三个都是矩阵算得出来的;第四个不是。</span>
+</div>
+
+<div class="okbox" data-page-node-id="CQcknSbjwp1nBcCbP3Ff5e"><b data-page-node-id="y8I6KM4PxC0X9wnwgAVxHg">建议的下一步:</b>① 用 numpy 手动实现第 12 章的 QKV 演算(30 行代码),再在 PyTorch 里对真实 EHR 数据(如 MIMIC 提取的小队列)复现;② 把第 14 章的"交互强度轨迹"做成你论文的 Figure 1 候选;③ 写作时把第 20 章避坑清单贴在桌上。</div>
+</section>
+
+</main>
+</div>
+<div class="footer" data-page-node-id="56zIKNLUZTW4Vyf2ECdidw">用「时序患者表征学习」学通线性代数 · Attention ≠ Weight ≠ Correlation ≠ Causality</div>
+<script>
+/* ================= Demo: patient similarity ================= */
+(function(){
+  const cv=document.getElementById('simCanvas'),ctx=cv.getContext('2d');
+  const sl={g:document.getElementById('simG'),h:document.getElementById('simH'),b:document.getElementById('simB')};
+  const P1=[2.0,1.5,-1.0],names=['血糖','心率','血压'];
+  function draw(){
+    const P2=[+sl.g.value/10,+sl.h.value/10,+sl.b.value/10];
+    document.getElementById('simGV').textContent=(P2[0]).toFixed(1);
+    document.getElementById('simHV').textContent=(P2[1]).toFixed(1);
+    document.getElementById('simBV').textContent=(P2[2]).toFixed(1);
+    const dot=P1[0]*P2[0]+P1[1]*P2[1]+P1[2]*P2[2];
+    const n1=Math.hypot(...P1),n2=Math.hypot(...P2);
+    const cos=n2>1e-9?dot/(n1*n2):0;
+    const dist=Math.hypot(P1[0]-P2[0],P1[1]-P2[1],P1[2]-P2[2]);
+    ctx.clearRect(0,0,cv.width,cv.height);
+    // radar-like bars
+    const bx=70,bw=150,rows=[[70,'P1',P1,'#0e7490'],[150,'P2',P2,'#dc2626']];
+    ctx.font='13px sans-serif';
+    names.forEach((nm,j)=>{
+      ctx.fillStyle='#475069';ctx.fillText(nm,10,40+j*70+5);
+    });
+    rows.forEach(([y,label,v,color])=>{
+      ctx.fillStyle=color;ctx.fillText(label,10,y-12);
+      v.forEach((val,j)=>{
+        const x=bx+j*(bw+40);
+        ctx.fillStyle='#eef1f7';ctx.fillRect(x,y-22,bw,34);
+        const zero=x+bw/2, w=val/3*(bw/2);
+        ctx.fillStyle=color;
+        ctx.fillRect(Math.min(zero,zero+w),y-22,Math.abs(w),34);
+        ctx.strokeStyle='#c9d2e4';ctx.beginPath();ctx.moveTo(zero,y-26);ctx.lineTo(zero,y+16);ctx.stroke();
+        ctx.fillStyle='#1b2437';ctx.fillText(val.toFixed(1),x+bw/2-12,y+32);
+      });
+    });
+    // similarity gauge
+    const gx=70,gy=240;
+    ctx.fillStyle='#eef1f7';ctx.fillRect(gx,gy-14,380,16);
+    ctx.fillStyle=cos>0.9?'#047857':cos>0.5?'#b45309':'#dc2626';
+    ctx.fillRect(gx,gy-14,Math.max(0,(cos+1)/2)*380,16);
+    ctx.fillStyle='#1b2437';ctx.fillText('余弦相似度: '+cos.toFixed(3),gx,gy+26);
+    document.getElementById('simOut').textContent=
+      `P1 = (2.0, 1.5, -1.0)   P2 = (${P2.map(v=>v.toFixed(1)).join(', ')})\n`+
+      `点积 = ${dot.toFixed(3)}   余弦相似度 = ${cos.toFixed(3)}   欧氏距离 = ${dist.toFixed(3)}\n`+
+      (cos>0.9?'→ 高度相似:同种病情模式,可匹配到同一患者亚群':
+       cos>0.5?'→ 部分相似:模式相近但某些特征走向不同':
+       cos>0?'→ 相似度低:警惕归为同类':
+       '→ 反向模式:临床上可能是不同病因(如低血糖 vs 高糖)');
+  }
+  Object.values(sl).forEach(s=>s.oninput=draw);draw();
+})();
+</script>
+<script>
+/* ================= Demo: patient cohort PCA ================= */
+(function(){
+  const cv=document.getElementById('pcaCanvas'),ctx=cv.getContext('2d');
+  const cS=document.getElementById('pcaC'),out=document.getElementById('pcaOut');
+  let pts=[];
+  function gen(){
+    const c=+cS.value/100;
+    pts=[];
+    for(let i=0;i<70;i++){
+      const s=(Math.random()+Math.random()+Math.random()-1.5)*1.4; // latent severity
+      const n1=(Math.random()+Math.random()-1)*Math.sqrt(1-c*c)*1.2;
+      const n2=(Math.random()+Math.random()-1)*Math.sqrt(1-c*c)*1.2;
+      pts.push([c*s+n1, c*s+n2, s]);
+    }
+  }
+  function draw(){
+    const W=cv.width,H=cv.height,cx=W/2,cy=H/2,SC=60;
+    document.getElementById('pcaCV').textContent=(+cS.value/100).toFixed(2);
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='#e3e8f0';
+    ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.moveTo(cx,0);ctx.lineTo(cx,H);ctx.stroke();
+    let sxx=0,sxy=0,syy=0;
+    pts.forEach(p=>{sxx+=p[0]*p[0];sxy+=p[0]*p[1];syy+=p[1]*p[1]});
+    const n=pts.length;sxx/=n;sxy/=n;syy/=n;
+    const tr=sxx+syy,det=sxx*syy-sxy*sxy,disc=Math.sqrt(Math.max(tr*tr-4*det,0));
+    const l1=(tr+disc)/2,l2=(tr-disc)/2;
+    let v1=Math.abs(sxy)>1e-9?[l1-syy,sxy]:[1,0];
+    const nv=Math.hypot(v1[0],v1[1]);v1=[v1[0]/nv,v1[1]/nv];
+    if(sxy<0)v1=[-v1[0],-v1[1]];
+    // points colored by latent severity
+    pts.forEach(p=>{
+      const t=Math.max(0,Math.min(1,(p[2]+2)/4));
+      ctx.fillStyle=`rgba(${Math.round(20+t*200)},${Math.round(120-t*80)},${Math.round(150-t*100)},0.75)`;
+      ctx.beginPath();ctx.arc(cx+p[0]*SC,cy-p[1]*SC,4,0,7);ctx.fill();
+    });
+    // PC1 arrow
+    const r=2.2;
+    const x=cx+v1[0]*r*SC,y=cy-v1[1]*r*SC;
+    ctx.strokeStyle='#dc2626';ctx.fillStyle='#dc2626';ctx.lineWidth=3;
+    ctx.beginPath();ctx.moveTo(cx-v1[0]*r*SC,cy+v1[1]*r*SC);ctx.lineTo(x,y);ctx.stroke();
+    const an=Math.atan2(-(y-cy),x-cx);
+    ctx.beginPath();ctx.moveTo(x,y);
+    ctx.lineTo(x-11*Math.cos(an-0.4),y+11*Math.sin(an-0.4));
+    ctx.lineTo(x-11*Math.cos(an+0.4),y+11*Math.sin(an+0.4));
+    ctx.closePath();ctx.fill();
+    ctx.font='bold 14px sans-serif';ctx.fillText('PC1',x+8,y-8);
+    const ratio=l1/(l1+l2)*100;
+    out.textContent=`协方差 Σ = [[${sxx.toFixed(2)}, ${sxy.toFixed(2)}], [${sxy.toFixed(2)}, ${syy.toFixed(2)}]]\n`+
+      `λ₁ = ${l1.toFixed(2)}  λ₂ = ${l2.toFixed(2)}   PC1 解释方差 ${ratio.toFixed(1)}%\n`+
+      `PC1 方向 = (${v1[0].toFixed(2)}, ${v1[1].toFixed(2)}) → 血糖权重 ${v1[0].toFixed(2)}、心率权重 ${v1[1].toFixed(2)}\n`+
+      `颜色 = 潜在病情严重度(本演示由它生成数据,所以可验证):共变越强,PC1 越接近这条候选严重度轴\n注意:真实数据中"PC1 = 严重度"是待验证假设,不是 PCA 的结论 —— 这里能对应是因为我们已知生成机制`;
+  }
+  document.getElementById('pcaRegen').onclick=()=>{gen();draw()};
+  cS.oninput=()=>{gen();draw()};
+  gen();draw();
+})();
+
+/* ================= Demo: feature attention heatmap ================= */
+(function(){
+  const cv=document.getElementById('attCanvas'),ctx=cv.getContext('2d');
+  const sS=document.getElementById('attS'),out=document.getElementById('attOut');
+  const feats=['血糖','心率','血压'];
+  let mode='P1';
+  function softmax(r){const m=Math.max(...r);const e=r.map(v=>Math.exp(v-m));const s=e.reduce((a,b)=>a+b,0);return e.map(v=>v/s)}
+  function getA(){
+    const s=+sS.value/100; // interaction strength
+    if(mode==='P1'){
+      return [
+        softmax([0.5, 2.2*s, 0.4]),
+        softmax([2.0*s, 0.6, 0.3]),
+        softmax([1.2*s, 0.5, 0.8])
+      ];
+    }
+    return [
+      softmax([1.4, 0.5*s, 0.3]),
+      softmax([0.4*s, 1.5, 0.4]),
+      softmax([0.3*s, 0.4, 1.6])
+    ];
+  }
+  function draw(){
+    const A=getA();
+    document.getElementById('attSV').textContent=(+sS.value/100).toFixed(2);
+    document.getElementById('attP1').className=mode==='P1'?'on':'ghost';
+    document.getElementById('attP2').className=mode==='P2'?'on':'ghost';
+    ctx.clearRect(0,0,cv.width,cv.height);
+    const cell=64,x0=120,y0=44;
+    ctx.font='14px sans-serif';ctx.fillStyle='#475069';
+    ctx.fillText((mode==='P1'?'患者 P1(休克前期)':'患者 P2(稳定期)')+' 的特征注意力矩阵 A',x0,22);
+    feats.forEach((f,j)=>ctx.fillText(f,x0+j*cell+cell/2-14,y0-10));
+    feats.forEach((f,i)=>ctx.fillText(f,x0-40,y0+i*cell+cell/2+5));
+    ctx.fillStyle='#7a86a0';ctx.font='12px sans-serif';
+    ctx.fillText('提供方 →',x0+3*cell+8,y0-10);
+    ctx.fillText('接',x0-72,y0+cell/2);ctx.fillText('收',x0-72,y0+cell/2+16);ctx.fillText('方',x0-72,y0+cell/2+32);
+    A.forEach((row,i)=>row.forEach((v,j)=>{
+      const x=x0+j*cell,y=y0+i*cell;
+      ctx.fillStyle=`rgba(124,58,237,${0.07+v*0.85})`;
+      ctx.fillRect(x,y,cell-2,cell-2);
+      ctx.fillStyle=v>0.45?'#fff':'#1b2437';
+      ctx.font='bold 13px sans-serif';
+      ctx.fillText(v.toFixed(2),x+cell/2-14,y+cell/2+5);
+    }));
+    // interpretation
+    const g=A[0],h=A[1];
+    out.textContent=
+      `逐行解读(${mode}):\n`+
+      `血糖行 = [${g.map(v=>v.toFixed(2)).join(', ')}] → new Glucose = ${g[0].toFixed(2)}·V_血糖 + ${g[1].toFixed(2)}·V_心率 + ${g[2].toFixed(2)}·V_血压\n`+
+      `心率行 = [${h.map(v=>v.toFixed(2)).join(', ')}] → new HR = ${h[0].toFixed(2)}·V_血糖 + ${h[1].toFixed(2)}·V_心率 + ${h[2].toFixed(2)}·V_血压\n`+
+      `论文式表述(合规版): "For patient ${mode}, the value vector of HR receives an aggregation\n`+
+      `weight of ${g[1].toFixed(2)} when updating the glucose representation (A_G,H = ${g[1].toFixed(2)}),\n`+
+      `indicating learned feature interactions — an aggregation weight, NOT an information\n`+
+      `percentage, statistical correlation, or causal effect."`;
+  }
+  document.getElementById('attP1').onclick=()=>{mode='P1';draw()};
+  document.getElementById('attP2').onclick=()=>{mode='P2';draw()};
+  sS.oninput=draw;draw();
+})();
+
+/* ================= Demo: dual patient comparison ================= */
+(function(){
+  const cv=document.getElementById('duCanvas'),ctx=cv.getContext('2d');
+  const sev=document.getElementById('duSev'),out=document.getElementById('duOut');
+  const feats=['血糖','心率','血压'];
+  const A_P1=[[0.2,0.7,0.1],[0.6,0.3,0.1],[0.4,0.2,0.4]];
+  const A_stable=[[0.7,0.2,0.1],[0.1,0.8,0.1],[0.1,0.2,0.7]];
+  function lerp(a,b,t){return a+(b-a)*t}
+  function draw(){
+    const t=+sev.value/100;
+    document.getElementById('duSevV').textContent=t<0.33?'稳定':t<0.66?'代偿期':'危重';
+    const A2=A_stable.map((row,i)=>row.map((v,j)=>lerp(v,A_P1[i][j],t)));
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.font='13px sans-serif';
+    function heat(A,x0,title,color){
+      const cell=52,y0=52;
+      ctx.fillStyle='#475069';ctx.fillText(title,x0,26);
+      feats.forEach((f,j)=>ctx.fillText(f,x0+j*cell+10,y0-8));
+      feats.forEach((f,i)=>ctx.fillText(f,x0-40,y0+i*cell+30));
+      A.forEach((row,i)=>row.forEach((v,j)=>{
+        const x=x0+j*cell,y=y0+i*cell;
+        ctx.fillStyle=`rgba(${color},${0.08+v*0.85})`;
+        ctx.fillRect(x,y,cell-2,cell-2);
+        ctx.fillStyle=v>0.5?'#fff':'#1b2437';
+        ctx.font='bold 12px sans-serif';
+        ctx.fillText(v.toFixed(2),x+cell/2-13,y+cell/2+4);
+      }));
+    }
+    heat(A_P1,90,'患者 P1(休克前期)','220,38,38');
+    heat(A2,380,'患者 P2(严重度可调)','14,116,144');
+    // arrow between
+    ctx.strokeStyle='#7a86a0';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(300,140);ctx.lineTo(360,140);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(360,140);ctx.lineTo(350,134);ctx.lineTo(350,146);ctx.closePath();
+    ctx.fillStyle='#7a86a0';ctx.fill();
+    ctx.font='12px sans-serif';ctx.fillText('病情演变',306,128);
+    const gh=A2[0][1];
+    out.textContent=`P2 的 A_血糖,心率 = ${gh.toFixed(2)}(随严重度从 ${A_stable[0][1]} 向 P1 的 ${A_P1[0][1]} 迁移)\n`+
+      `研究观察:feature interaction strength is patient-state-dependent ——\n`+
+      `同一对特征(血糖↔心率)的 value 聚合权重随患者状态变化,\n`+
+      `P1(危重)= 0.70 vs P2(当前)= ${gh.toFixed(2)}。这就是 patient-specific interaction 的证据形态\n`+
+      `(前提:嵌入必须依赖患者状态,见 12.2;且权重 ≠ 信息占比/相关/因果)。`;
+  }
+  sev.oninput=draw;draw();
+})();
+
+/* ================= Demo: time decay vs learned attention ================= */
+(function(){
+  const cv=document.getElementById('tmCanvas'),ctx=cv.getContext('2d');
+  const tauS=document.getElementById('tmTau'),out=document.getElementById('tmOut');
+  const dt=[72,60,48,36,24,18,12,2];          // hours before now
+  const learned=[0.04,0.05,0.30,0.06,0.08,0.10,0.12,0.25]; // learned attention (spike at t=48h: 病因事件)
+  function draw(){
+    const tau=+tauS.value;
+    document.getElementById('tmTauV').textContent=tau+'h';
+    const decay=dt.map(d=>Math.exp(-d/tau));
+    const ds=decay.reduce((a,b)=>a+b,0);
+    const dn=decay.map(v=>v/ds);
+    ctx.clearRect(0,0,cv.width,cv.height);
+    const x0=50,y0=210,bw=54,hh=170;
+    ctx.strokeStyle='#c9d2e4';
+    ctx.beginPath();ctx.moveTo(x0-10,y0);ctx.lineTo(cv.width-10,y0);ctx.stroke();
+    dt.forEach((d,i)=>{
+      const x=x0+i*(bw+8);
+      // decay bar
+      ctx.fillStyle='rgba(14,116,144,0.75)';
+      ctx.fillRect(x,y0-dn[i]*hh*2.2,bw/2-2,dn[i]*hh*2.2);
+      // learned bar
+      ctx.fillStyle='rgba(220,38,38,0.75)';
+      ctx.fillRect(x+bw/2,y0-learned[i]*hh*2.2,bw/2-2,learned[i]*hh*2.2);
+      ctx.fillStyle='#475069';ctx.font='11px sans-serif';
+      ctx.fillText('-'+d+'h',x+4,y0+16);
+    });
+    ctx.fillStyle='rgba(14,116,144,1)';ctx.fillRect(360,14,12,12);
+    ctx.fillStyle='#1b2437';ctx.fillText('指数衰减(先验,τ='+tau+'h)',378,24);
+    ctx.fillStyle='rgba(220,38,38,1)';ctx.fillRect(360,32,12,12);
+    ctx.fillText('学到的注意力(数据驱动)',378,42);
+    const d48=dn[2];
+    out.textContent=`48 小时前那次测量(病因事件:首次高糖危象):\n`+
+      `  先验衰减给它的权重 = ${(d48*100).toFixed(1)}%   |   模型学到的权重 = 30.0%\n`+
+      (tau<16?`τ=${tau}h 太小:先验几乎抹掉了 48h 前的事件(${(d48*100).toFixed(1)}% ≪ 30%)\n→ 强先验压垮了数据信号 —— 这就是纯衰减模型(如 GRU-D 的固定衰减)的局限`:
+       tau>60?`τ=${tau}h 较大:先验变平,数据驱动的注意力得以凸显关键事件 ✓`:
+       `τ=${tau}h 中等:先验与数据折中。真实模型通常让 τ 也成为可学习参数`);
+  }
+  tauS.oninput=draw;draw();
+})();
+</script>
+<script>
+/* ================= Demo: Lp norm ball ================= */
+(function(){
+  const cv=document.getElementById('normCanvas2'),ctx=cv.getContext('2d');
+  const sl=document.getElementById('normP2');
+  function draw(){
+    const p=+sl.value/100, W=cv.width,H=cv.height,c=W/2,s=W*0.4;
+    document.getElementById('normPV2').textContent=p.toFixed(2);
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='#eef1f7';ctx.lineWidth=1;
+    for(let g=-1;g<=1;g+=0.5){
+      ctx.beginPath();ctx.moveTo(c+g*s,0);ctx.lineTo(c+g*s,H);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(0,c+g*s);ctx.lineTo(W,c+g*s);ctx.stroke();
+    }
+    ctx.strokeStyle='#94a3b8';
+    ctx.beginPath();ctx.moveTo(0,c);ctx.lineTo(W,c);ctx.moveTo(c,0);ctx.lineTo(c,H);ctx.stroke();
+    ctx.strokeStyle='#0e7490';ctx.lineWidth=2.5;ctx.beginPath();
+    for(let t=0;t<=360;t++){
+      const a=t*Math.PI/180, cu=Math.cos(a), sv=Math.sin(a);
+      const r=Math.pow(Math.pow(Math.abs(cu),p)+Math.pow(Math.abs(sv),p),-1/p);
+      const x=c+r*cu*s, y=c-r*sv*s;
+      t===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();ctx.stroke();
+    ctx.fillStyle='#475069';ctx.font='13px sans-serif';
+    ctx.fillText('‖w‖'+(p===2?'₂':p===1?'₁':'')+' = 1 的约束球',14,22);
+    ctx.fillStyle='#7a86a0';ctx.font='12px sans-serif';
+    ctx.fillText(p<=1.05?'尖角在坐标轴上 → 最优解易撞角 → 某些 w_i = 0(特征被剔除)':p<=2.05?'光滑圆 → 系数普遍变小但不为 0(平滑收缩)':'接近方形 → 惩罚最大分量(最坏情况控制)',14,H-12);
+  }
+  sl.oninput=draw;draw();
+})();
+
+/* ================= Demo: matrix deformer ================= */
+(function(){
+  const cv=document.getElementById('mtxCanvas2'),ctx=cv.getContext('2d');
+  const ids=['mA2','mB2','mC2','mD2'],sl=ids.map(i=>document.getElementById(i));
+  const out=document.getElementById('mtxOut2');
+  function draw(){
+    const [a,b,c,d]=sl.map(s=>+s.value/100),W=cv.width,H=cv.height,cx=W/2,cy=H/2,S=32;
+    document.getElementById('mAV2').textContent=a.toFixed(2);
+    document.getElementById('mBV2').textContent=b.toFixed(2);
+    document.getElementById('mCV2').textContent=c.toFixed(2);
+    document.getElementById('mDV2').textContent=d.toFixed(2);
+    ctx.clearRect(0,0,W,H);
+    function P(x,y){return [cx+x*S, cy-y*S]}
+    ctx.lineWidth=1;
+    for(let g=-5;g<=5;g++){
+      ctx.strokeStyle='#f1f4fa';
+      let p1=P(g,-5),p2=P(g,5);ctx.beginPath();ctx.moveTo(p1[0],p1[1]);ctx.lineTo(p2[0],p2[1]);ctx.stroke();
+      p1=P(-5,g);p2=P(5,g);ctx.beginPath();ctx.moveTo(p1[0],p1[1]);ctx.lineTo(p2[0],p2[1]);ctx.stroke();
+    }
+    function T(x,y){return P(a*x+b*y, c*x+d*y)}
+    for(let g=-5;g<=5;g++){
+      ctx.strokeStyle='#bae6fd';
+      let p1=T(g,-5),p2=T(g,5);ctx.beginPath();ctx.moveTo(p1[0],p1[1]);ctx.lineTo(p2[0],p2[1]);ctx.stroke();
+      p1=T(-5,g);p2=T(5,g);ctx.beginPath();ctx.moveTo(p1[0],p1[1]);ctx.lineTo(p2[0],p2[1]);ctx.stroke();
+    }
+    ctx.strokeStyle='#0e7490';ctx.lineWidth=2;ctx.beginPath();
+    [[0,0],[1,0],[1,1],[0,1]].forEach((p,i)=>{const q=T(p[0],p[1]);i===0?ctx.moveTo(q[0],q[1]):ctx.lineTo(q[0],q[1])});
+    ctx.closePath();ctx.stroke();
+    function arr(x1,y1,color,lw){
+      const p0=P(0,0),p1=P(x1,y1);
+      ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=lw||2.5;
+      ctx.beginPath();ctx.moveTo(p0[0],p0[1]);ctx.lineTo(p1[0],p1[1]);ctx.stroke();
+      const an=Math.atan2(-(p1[1]-p0[1]),p1[0]-p0[0]);
+      ctx.beginPath();ctx.moveTo(p1[0],p1[1]);
+      ctx.lineTo(p1[0]-9*Math.cos(an-0.4),p1[1]+9*Math.sin(an-0.4));
+      ctx.lineTo(p1[0]-9*Math.cos(an+0.4),p1[1]+9*Math.sin(an+0.4));
+      ctx.closePath();ctx.fill();
+    }
+    arr(a,c,'#059669',3); arr(b,d,'#d97706',3);
+    const tr=a+d, det=a*d-b*c, disc=tr*tr-4*det;
+    let info=`M = [[${a.toFixed(2)}, ${b.toFixed(2)}], [${c.toFixed(2)}, ${d.toFixed(2)}]]\ndet(M) = ${det.toFixed(3)} → 面积缩放 ${Math.abs(det).toFixed(3)} 倍`;
+    if(disc>=0){
+      const l1=(tr+Math.sqrt(disc))/2,l2=(tr-Math.sqrt(disc))/2;
+      function ev(l){
+        if(Math.abs(b)>1e-9)return [b,l-a];
+        if(Math.abs(c)>1e-9)return [l-d,c];
+        return Math.abs(a-l)<1e-9?[1,0]:[0,1];
+      }
+      const v1=ev(l1),v2=ev(l2);
+      const n1=Math.hypot(...v1)||1,n2=Math.hypot(...v2)||1;
+      arr(1.6*v1[0]/n1,1.6*v1[1]/n1,'#dc2626',2.5);
+      arr(1.6*v2[0]/n2,1.6*v2[1]/n2,'#2563eb',2.5);
+      info+=`\nλ₁ = ${l1.toFixed(3)}(红箭头),λ₂ = ${l2.toFixed(3)}(蓝箭头) —— 这两个方向只缩放、不转向`;
+      if(Math.abs(det)<1e-6)info+=`\n⚠ det=0:空间压扁,秩亏不可逆(特征冗余的几何样子)`;
+    }else{
+      info+=`\n复特征值(${tr.toFixed(2)} ± ${(Math.sqrt(-disc)/2).toFixed(2)}i)→ 含旋转成分`;
+    }
+    info+=`\n绿箭头 = M·(1,0),橙箭头 = M·(0,1)(即 M 的两列)`;
+    out.textContent=info;
+  }
+  function setM(v){sl.forEach((s,i)=>s.value=v[i]);draw()}
+  document.getElementById('mPre1').onclick=()=>setM([87,-50,50,87]);
+  document.getElementById('mPre2').onclick=()=>setM([100,80,0,100]);
+  document.getElementById('mPre3').onclick=()=>setM([200,50,50,100]);
+  sl.forEach(s=>s.oninput=draw);draw();
+})();
+
+/* ================= Demo: gradient descent ================= */
+(function(){
+  const cv=document.getElementById('gdCanvas2'),ctx=cv.getContext('2d');
+  const lrS=document.getElementById('gdLr2'),out=document.getElementById('gdOut2');
+  let path=[],timer=null;
+  const A=0.5,B=4;
+  function f(x,y){return A*x*x+B*y*y}
+  function grad(x,y){return [2*A*x,2*B*y]}
+  function toPx(x,y){return [cv.width/2+x*26, cv.height/2-y*26]}
+  function drawBase(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    for(let l=1;l<=8;l++){
+      const r=Math.sqrt(l*1.6);
+      ctx.strokeStyle=`rgba(14,116,144,${0.10+l*0.03})`;ctx.lineWidth=1;
+      ctx.beginPath();
+      for(let t=0;t<=120;t++){
+        const a=t/120*2*Math.PI;
+        const p=toPx(r/Math.sqrt(A)*Math.cos(a), r/Math.sqrt(B)*Math.sin(a));
+        t===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]);
+      }
+      ctx.closePath();ctx.stroke();
+    }
+    const o=toPx(0,0);
+    ctx.fillStyle='#059669';ctx.beginPath();ctx.arc(o[0],o[1],5,0,7);ctx.fill();
+    ctx.font='12px sans-serif';ctx.fillText('最优 w*',o[0]+8,o[1]-6);
+  }
+  function drawPath(){
+    drawBase();
+    ctx.strokeStyle='#dc2626';ctx.lineWidth=2;ctx.beginPath();
+    path.forEach((p,i)=>{const q=toPx(p[0],p[1]);i===0?ctx.moveTo(q[0],q[1]):ctx.lineTo(q[0],q[1])});
+    ctx.stroke();
+    path.forEach((p,i)=>{const q=toPx(p[0],p[1]);ctx.fillStyle=i===path.length-1?'#dc2626':'#f59e0b';ctx.beginPath();ctx.arc(q[0],q[1],3.5,0,7);ctx.fill()});
+  }
+  function reset(){clearInterval(timer);path=[[6,3.2]];drawPath();
+    const g=grad(6,3.2);
+    out.textContent=`起点 w = (6, 3.2),L = ${f(6,3.2).toFixed(2)},∇L = (${g[0]}, ${g[1].toFixed(1)})\n点击"运行"开始梯度下降。`}
+  document.getElementById('gdReset2').onclick=reset;
+  document.getElementById('gdRun2').onclick=function(){
+    clearInterval(timer);
+    const lr=+lrS.value/1000;
+    let p=path[path.length-1].slice(),steps=0;
+    path=[p.slice()];
+    timer=setInterval(()=>{
+      const g=grad(p[0],p[1]);
+      p=[p[0]-lr*g[0], p[1]-lr*g[1]];
+      path.push(p.slice());steps++;
+      if(path.length>200)clearInterval(timer);
+      drawPath();
+      const fv=f(p[0],p[1]);
+      if(fv>1e4||!isFinite(fv)){
+        clearInterval(timer);
+        out.textContent=`💥 发散!η=${lr} 超过 1/λ_max(H)=0.25,更新在峡谷两壁间越弹越远。\n训练时 loss 突变成 NaN 就是这个机制 —— 调小学习率或加梯度裁剪。`;
+        return;
+      }
+      out.textContent=`η = ${lr} | 第 ${steps} 步:w = (${p[0].toFixed(3)}, ${p[1].toFixed(3)})  L = ${fv.toFixed(5)}\n`+
+        (fv<0.01?'✅ 收敛!"之字形"来自 Hessian 条件数 κ=8:陡峭方向来回弹、平缓方向慢慢挪。':
+        '∇L = ('+g[0].toFixed(3)+', '+g[1].toFixed(3)+')');
+      if(fv<0.01)clearInterval(timer);
+    },80);
+  };
+  lrS.oninput=()=>{document.getElementById('gdLrV2').textContent=(+lrS.value/1000).toFixed(3)};
+  reset();
+})();
+</script>
+</body>
+</html>
